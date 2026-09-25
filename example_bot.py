@@ -26,10 +26,13 @@ class PersistentCounter(discord.ui.View):
     async def count(self, interaction: discord.Interaction, button: discord.ui.Button):
         number = int(button.label) if button.label else 0
         button.label = str(number + 1)
-        
 
         # Update the message with our updated selves
         await interaction.response.edit_message(view=self)
+
+        # Tell user they interacted
+        await interaction.followup.send(interaction.user.display_name +
+                                                ' counted.', ephemeral=True)
 
 class CustomBot(commands.Bot):
     # Suppress error on the User attribute being None
