@@ -2,16 +2,21 @@ import random
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import json
 import discord
 from discord.ext import commands
 from discord.utils import get
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
-LOGS_CHANNEL_ID = os.getenv('LOGS_CHANNEL')
-ON_OFF_CHANNEL_ID = os.getenv('ON_OFF_CHANNEL')
-ADMIN_ROLE_ID = os.getenv('ADMIN_ROLE')
-STAFF_MEMBER_ROLE_ID = os.getenv('STAFF_MEMBER_ROLE')
+
+with open('config.json', 'r') as f:
+    config = json.load(f)
+
+LOGS_CHANNEL_ID = config['LOGS_CHANNEL_ID']
+ON_OFF_CHANNEL_ID = config['ON_OFF_CHANNEL_ID']
+ADMIN_ROLE_NAME = config['ADMIN_ROLE_NAME']
+STAFF_MEMBER_ROLE_NAME = config['STAFF_MEMBER_ROLE_NAME']
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -153,7 +158,7 @@ respectively. Summed together that is {total}.'''
     await ctx.send(result)
 
 @bot.command()
-@commands.has_role('staff-member')
+@commands.has_role(STAFF_MEMBER_ROLE_NAME)
 async def send_modmail_embed(ctx):
     embed = discord.Embed(title="Modmail System",
                       description="Welcome to Modmail!",
@@ -185,13 +190,13 @@ async def send_modmail_embed(ctx):
 @bot.command()
 async def is_admin(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if get(member.roles, name = 'admin') else 'does not have'} ' +
+    f'{'has' if get(member.roles, name = ADMIN_ROLE_NAME) else 'does not have'} ' +
     f'the magical A powers.')
 
 @bot.command()
 async def is_staff_member(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if get(member.roles, name = 'staff-member') else 'does not have'} ' +
+    f'{'has' if get(member.roles, name = STAFF_MEMBER_ROLE_NAME) else 'does not have'} ' +
     f'the magical Super Mario powers.')
 
 bot.run(BOT_TOKEN)
