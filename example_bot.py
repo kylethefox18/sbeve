@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
+from discord.utils import get
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -96,7 +97,9 @@ async def on_message(message):
         return
 
     if message.content == "67":
-        await message.channel.send(f'<@{message.author.id}>: Your parents don\'t love you.')
+        await message.channel.send(
+                f'<@{message.author.id}>: Your parents don\'t love you.'
+                )
 
     await bot.process_commands(message)
 
@@ -150,14 +153,8 @@ respectively. Summed together that is {total}.'''
     await ctx.send(result)
 
 @bot.command()
+@commands.has_role('staff-member')
 async def send_modmail_embed(ctx):
-    if (not is_role(ctx.message.author, STAFF_MEMBER_ROLE_ID)):
-        fail_message = (f'send_modmail_embed: ' +
-            f'User {ctx.message.author} tried to execute function. Is not staff.')
-        print(fail_message)
-        await logs_channel.send(fail_message)
-        return
-
     embed = discord.Embed(title="Modmail System",
                       description="Welcome to Modmail!",
                       colour=0xff7800,
@@ -188,22 +185,13 @@ async def send_modmail_embed(ctx):
 @bot.command()
 async def is_admin(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if is_role(member, ADMIN_ROLE_ID) else 'does not have'} ' +
+    f'{'has' if get(member.roles, name = 'admin') else 'does not have'} ' +
     f'the magical A powers.')
 
 @bot.command()
 async def is_staff_member(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if is_role(member, STAFF_MEMBER_ROLE_ID) else 'does not have'} ' +
+    f'{'has' if get(member.roles, name = 'staff-member') else 'does not have'} ' +
     f'the magical Super Mario powers.')
-
-def is_role(member, roleID):
-    roles = member.roles
-    memberIsRole = False
-    for role in roles:
-        if str(role.id) == roleID:
-            memberIsRole = True
-
-    return memberIsRole
 
 bot.run(BOT_TOKEN)
