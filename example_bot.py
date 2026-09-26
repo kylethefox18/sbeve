@@ -44,7 +44,7 @@ class PersistentModmailButton(discord.ui.View):
     # When pressed, this does the following:
     #   Creates a temporary channel
     #   Allows all staff and user who pressed button to see channel
-    @discord.ui.button(label='0', style=discord.ButtonStyle.primary,
+    @discord.ui.button(label='Open Modmail', style=discord.ButtonStyle.primary,
                        custom_id='persistent_modmail_button:open_modmail')
     async def open_modmail(self, interaction: discord.Interaction,
                            button: discord.ui.Button):
