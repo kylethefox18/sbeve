@@ -1,8 +1,9 @@
+import random
+from datetime import datetime
 import os
 from dotenv import load_dotenv
 import discord
 from discord.ext import commands
-import random
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -132,12 +133,26 @@ async def send_modmail_embed(ctx):
         await logs_channel.send(fail_message)
         return
 
-    embed = discord.Embed(title="Open a Modmail",
-                          description="Click the button below to open a modmail. "
-                          "This will add you to a temporary modmail channel where staff "
-                          "will be notified.",
-                          colour=0x00b0f4)
-    await ctx.send(embed=embed)
+    embed = discord.Embed(title="Modmail System",
+                      description="Welcome to Modmail!",
+                      colour=0xff7800,
+                      timestamp=datetime.now())
+    
+    embed.set_author(name="Form of Communication")
+    
+    embed.add_field(name="Purpose",
+                    value="If you click the button below, you will create a temporary chat inside of our server which will allow you to communicate with the staff team! You can voice your concerns, bring new ideas to the staff team or even ask any question regarding the server. You can even apply for the artist role this way!\n\nThis form of communication is to be taken seriously. Misuse or abuse of this feature will result in consequences.",
+                    inline=False)
+    
+    embed.set_footer(
+        text="The Anthro Inn Staff Team",
+        icon_url="https://media.discordapp.net/attachments/806188733514121239/" +
+        "1553161882205032488/TAIlogo.png?ex=6ab83e39&is=6ab6ecb9&hm=1f4deb524bf933fc528" +
+        "002b10598046979b2e1a41f36bd5d0c6df7b05ce86dbc&=&format=webp&quality=lossless" +
+        "&width=1536&height=1067"
+        )
+    
+    await ctx.send(embed=embed, view=PersistentCounter())
 
 @bot.command()
 async def isAdmin(ctx, member: discord.Member):
