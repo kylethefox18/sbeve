@@ -151,7 +151,7 @@ respectively. Summed together that is {total}.'''
 
 @bot.command()
 async def send_modmail_embed(ctx):
-    if (not isRole(ctx.message.author, STAFF_MEMBER_ROLE_ID)):
+    if (not is_role(ctx.message.author, STAFF_MEMBER_ROLE_ID)):
         fail_message = (f'send_modmail_embed: ' +
             f'User {ctx.message.author} tried to execute function. Is not staff.')
         print(fail_message)
@@ -186,18 +186,18 @@ async def send_modmail_embed(ctx):
     await ctx.send(embed=embed, view=PersistentModmailButton())
 
 @bot.command()
-async def isAdmin(ctx, member: discord.Member):
+async def is_admin(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if isRole(member, ADMIN_ROLE_ID) else 'does not have'} ' +
+    f'{'has' if is_role(member, ADMIN_ROLE_ID) else 'does not have'} ' +
     f'the magical A powers.')
 
 @bot.command()
-async def isStaffMember(ctx, member: discord.Member):
+async def is_staff_member(ctx, member: discord.Member):
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if isRole(member, STAFF_MEMBER_ROLE_ID) else 'does not have'} ' +
+    f'{'has' if is_role(member, STAFF_MEMBER_ROLE_ID) else 'does not have'} ' +
     f'the magical Super Mario powers.')
 
-def isRole(member, roleID):
+def is_role(member, roleID):
     roles = member.roles
     memberIsRole = False
     for role in roles:
