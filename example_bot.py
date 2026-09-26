@@ -74,10 +74,11 @@ class CustomBot(commands.Bot):
         super().__init__(*args, **kwargs)
 
     async def setup_hook(self) -> None:
-        # Register the persistent view for listening here
+        # Register the persistent views for listening here
         # This does not send the view to any message.
         # In order to do this, you must first send a message with the View.
         self.add_view(PersistentCounter())
+        self.add_view(PersistentModmailButton())
         
     async def on_ready(self):
         print(f'We have logged in as {self.user} (ID: {self.user.id})')
@@ -179,10 +180,7 @@ async def send_modmail_embed(ctx):
     
     embed.set_footer(
         text="The Anthro Inn Staff Team",
-        icon_url="https://media.discordapp.net/attachments/806188733514121239/"
-        "1553161882205032488/TAIlogo.png?ex=6ab83e39&is=6ab6ecb9&hm=1f4deb524bf933fc528"
-        "002b10598046979b2e1a41f36bd5d0c6df7b05ce86dbc&=&format=webp&quality=lossless"
-        "&width=1536&height=1067"
+        icon_url="https://i.imgur.com/3V1A55G.png"
         )
     
     await ctx.send(embed=embed, view=PersistentModmailButton())
