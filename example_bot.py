@@ -35,6 +35,31 @@ class PersistentCounter(discord.ui.View):
         await interaction.followup.send(interaction.user.display_name +
                                                 ' counted.', ephemeral=True)
 
+# A simple View for a persistent "Open Modmail" button
+class PersistentModmailButton(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    # Define the Open Modmail button
+    # When pressed, this does the following:
+    #   Creates a temporary channel
+    #   Allows all staff and user who pressed button to see channel
+    @discord.ui.button(label='0', style=discord.ButtonStyle.primary,
+                       custom_id='persistent_modmail_button:open_modmail')
+    async def open_modmail(self, interaction: discord.Interaction,
+                           button: discord.ui.Button):
+        # Log button press
+        action_msg = (f'{interaction.user.name} (ID {interaction.user.id}) ' +
+        f'pressed open modmail button.')
+        print(action_msg)
+        await logs_channel.send(action_msg)
+        # Tell user they interacted
+        await interaction.response.send_message(
+                f'{interaction.user.name}: Opening modmail...',
+                ephemeral=True
+                )
+        # TODO: add modmail opening code
+
 class CustomBot(commands.Bot):
     # Suppress error on the User attribute being None
     user: discord.ClientUser
@@ -141,18 +166,24 @@ async def send_modmail_embed(ctx):
     embed.set_author(name="Form of Communication")
     
     embed.add_field(name="Purpose",
-                    value="If you click the button below, you will create a temporary chat inside of our server which will allow you to communicate with the staff team! You can voice your concerns, bring new ideas to the staff team or even ask any question regarding the server. You can even apply for the artist role this way!\n\nThis form of communication is to be taken seriously. Misuse or abuse of this feature will result in consequences.",
+                    value="If you click the button below, you will create a temporary "
+                    "chat inside of our server which will allow you to communicate with "
+                    "the staff team! You can voice your concerns, bring new ideas to the "
+                    "staff team or even ask any question regarding the server. You can "
+                    "even apply for the artist role this way!\n\nThis form of "
+                    "communication is to be taken seriously. Misuse or abuse of this "
+                    "feature will result in consequences.",
                     inline=False)
     
     embed.set_footer(
         text="The Anthro Inn Staff Team",
-        icon_url="https://media.discordapp.net/attachments/806188733514121239/" +
-        "1553161882205032488/TAIlogo.png?ex=6ab83e39&is=6ab6ecb9&hm=1f4deb524bf933fc528" +
-        "002b10598046979b2e1a41f36bd5d0c6df7b05ce86dbc&=&format=webp&quality=lossless" +
+        icon_url="https://media.discordapp.net/attachments/806188733514121239/"
+        "1553161882205032488/TAIlogo.png?ex=6ab83e39&is=6ab6ecb9&hm=1f4deb524bf933fc528"
+        "002b10598046979b2e1a41f36bd5d0c6df7b05ce86dbc&=&format=webp&quality=lossless"
         "&width=1536&height=1067"
         )
     
-    await ctx.send(embed=embed, view=PersistentCounter())
+    await ctx.send(embed=embed, view=PersistentModmailButton())
 
 @bot.command()
 async def isAdmin(ctx, member: discord.Member):
