@@ -94,9 +94,14 @@ class CustomBot(commands.Bot):
         await on_off_channel.send('Sbeve ceases to actively sbeve.')
         await super().close()
 
-help_command = commands.DefaultHelpCommand(
-    no_category = 'Commands'
+class MyHelpCommand(commands.DefaultHelpCommand):
+    def get_ending_note(self):
+        return 'Type $help command for more info on a command.\nSbeve out.'
+
+help_command = MyHelpCommand(
+    no_category="Commands"
 )
+
 bot = CustomBot(
     command_prefix='$',
     description="sbeve sbeves.",
