@@ -33,6 +33,7 @@ class PersistentCounter(discord.ui.View):
     async def count(self, interaction: discord.Interaction, button: discord.ui.Button):
         number = int(button.label) if button.label else 0
         button.label = str(number + 1)
+        """Increases count on pressed button by 1."""
 
         # Update the message with our updated selves
         await interaction.response.edit_message(view=self)
@@ -93,9 +94,15 @@ class CustomBot(commands.Bot):
         await on_off_channel.send('Sbeve ceases to actively sbeve.')
         await super().close()
 
-bot = CustomBot(command_prefix='$', description="sbeve", intents=intents)
-
-@bot.event
+help_command = commands.DefaultHelpCommand(
+    no_category = 'Commands'
+)
+bot = CustomBot(
+    command_prefix='$',
+    description="sbeve sbeves.",
+    intents=intents,
+    help_command = help_command
+)
 
 @bot.event
 async def on_message(message):
@@ -110,12 +117,21 @@ async def on_message(message):
     await bot.process_commands(message)
 
 @bot.command()
-async def add(ctx, left: int, right: int):
+async def add(
+    ctx,
+    left: int = commands.parameter(description="One value to add."),
+    right: int = commands.parameter(description="Another value to add.")
+    ):
     """Adds two numbers together."""
     await ctx.send(left + right)
 
 @bot.command()
-async def joined(ctx, member: discord.Member):
+async def joined(
+    ctx,
+    member: discord.Member = commands.parameter(
+        description="The member whose join date to check."
+        )
+    ):
     """Says when a member joined."""
     # Join can be none: handle it.
     if member.joined_at is None:
@@ -130,8 +146,14 @@ async def counter(ctx: commands.Context):
     await ctx.send('Number bigger button', view=PersistentCounter())
 
 @bot.command()
-async def roll(ctx, dice: str):
-    """Rolls a dice in NdN format."""
+async def roll(
+    ctx, 
+    dice: str = commands.parameter(description="The NdN formatted string.")
+    ):
+    """Rolls dice from input in NdN format.
+    
+    The first N is the number of dice, the second N is the side count of the dice.
+    """
     try:
         rolls, limit = map(int, dice.split('d'))
     except Exception:
@@ -140,8 +162,8 @@ async def roll(ctx, dice: str):
 
     if (limit < 1):
         await ctx.send(
-                f'Your {limit}-dimensional object vanished into the {limit}th dimension.'
-                )
+            f'Your {limit}-dimensional object vanished into the {limit}th dimension.'
+            )
         return
 
     prefix = '';
@@ -161,6 +183,7 @@ respectively. Summed together that is {total}.'''
 @bot.command()
 @commands.has_role(STAFF_MEMBER_ROLE_NAME)
 async def send_modmail_embed(ctx):
+    """Sends the "Open Modmail" embed."""
     embed = discord.Embed(title="Modmail System",
                       description="Welcome to Modmail!",
                       colour=0xff7800,
@@ -186,13 +209,21 @@ async def send_modmail_embed(ctx):
     await ctx.send(embed=embed, view=PersistentModmailButton())
 
 @bot.command()
-async def is_admin(ctx, member: discord.Member):
+async def is_admin(
+        ctx,
+        member: discord.Member = commands.parameter(description="The member to check.")
+    ):
+    """Checks whether a member is an admin."""
     await ctx.send(f'{member.display_name} ' +
     f'{'has' if get(member.roles, name = ADMIN_ROLE_NAME) else 'does not have'} ' +
     f'the magical A powers.')
 
 @bot.command()
-async def is_staff_member(ctx, member: discord.Member):
+async def is_staff_member(
+        ctx,
+        member: discord.Member = commands.parameter(description="The member to check.")
+    ):
+    """Checks whether a member is a staff member."""
     await ctx.send(f'{member.display_name} ' +
     f'{'has' if get(member.roles, name = STAFF_MEMBER_ROLE_NAME) else 'does not have'} ' +
     f'the magical Super Mario powers.')
