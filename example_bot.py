@@ -17,6 +17,7 @@ LOGS_CHANNEL_ID = config['LOGS_CHANNEL_ID']
 ON_OFF_CHANNEL_ID = config['ON_OFF_CHANNEL_ID']
 ADMIN_ROLE_NAME = config['ADMIN_ROLE_NAME']
 STAFF_MEMBER_ROLE_NAME = config['STAFF_MEMBER_ROLE_NAME']
+STAFF_MEMBER_ROLE_ID = config['STAFF_MEMBER_ROLE_ID']
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -60,12 +61,66 @@ class PersistentModmailButton(discord.ui.View):
         f'pressed open modmail button.')
         print(action_msg)
         await logs_channel.send(action_msg)
-        # Tell user they interacted
+
+        # create a new modmail channel
+        modmail_channel = await create_modmail_channel(
+                interaction.guild,
+                interaction.channel.category,
+                interaction.user,
+                "Open Modmail button pressed")
+
         await interaction.response.send_message(
-                f'{interaction.user.name}: Opening modmail...',
+                f'{interaction.user.name}: Modmail opened, in <#{modmail_channel.id}>',
                 ephemeral=True
                 )
-        # TODO: add modmail opening code
+        
+
+async def create_modmail_channel(
+    guild: discord.Guild,
+    category: discord.CategoryChannel,
+    user_for: discord.User,
+    reason: str
+    ):
+    """Creates a temporary modmail channel.
+
+    This is a helper function for use with the 'open modmail button'.
+    Keyword arguments:
+    guild -- the guild in which to create the channel
+    category -- the category in which to create the channel
+    user_for -- the member for which to create the channel
+    reason -- the reason for creating the channel
+    """
+    modmail_id = config["MODMAIL_NEXT_ID"]
+    overwrites = {
+        guild.default_role: discord.PermissionOverwrite(read_messages=False),
+        guild.me: discord.PermissionOverwrite(read_messages=True),
+        user_for: discord.PermissionOverwrite(read_messages=True),
+        guild.get_role(STAFF_MEMBER_ROLE_ID):
+            discord.PermissionOverwrite(read_messages=True),
+    }
+
+    # make sure we are in a guild
+    assert guild is not None 
+
+    # create the channel
+    new_channel = await guild.create_text_channel(
+        name=f'Modmail {modmail_id}',
+        overwrites=overwrites,
+        topic=str(user_for.id),
+        reason=reason,
+        category=category
+    )
+
+    # an id was used. go to the next one
+    config["MODMAIL_NEXT_ID"] += 1
+
+    # record that the id was used in config
+    with open('config.json', 'w') as outfile:
+        json.dump(config, outfile, sort_keys=True, indent=4)
+
+    await new_channel.send(f'Hello <@{user_for.id}>\n'
+                           'What can we help you with?')
+    return new_channel
 
 class CustomBot(commands.Bot):
     # Suppress error on the User attribute being None
