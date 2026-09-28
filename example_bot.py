@@ -94,6 +94,12 @@ class CustomBot(commands.Bot):
         await on_off_channel.send('Sbeve ceases to actively sbeve.')
         await super().close()
 
+    async def on_command_error(self, context, exception, /):
+        await super().on_command_error(context, exception)
+        await context.channel.send(f'Error in command {context.command.name}:\n'
+                                   f'Is your input correct? '
+                                   f'Check $help {context.command.name}.')
+
 class MyHelpCommand(commands.DefaultHelpCommand):
     def get_ending_note(self):
         return 'Type $help command for more info on a command.\nSbeve out.'
@@ -124,10 +130,13 @@ async def on_message(message):
 @bot.command()
 async def add(
     ctx,
-    left: int = commands.parameter(description="One value to add."),
-    right: int = commands.parameter(description="Another value to add.")
+    left: int = commands.parameter(description="One integer to add."),
+    right: int = commands.parameter(description="Another integer to add.")
     ):
-    """Adds two numbers together."""
+    """Adds two integers together.
+
+Example: $add 2 3
+    """
     await ctx.send(left + right)
 
 @bot.command()
@@ -137,7 +146,11 @@ async def joined(
         description="The member whose join date to check."
         )
     ):
-    """Says when a member joined."""
+    """Says when a member joined.
+
+Member must be a member of the server.
+Example: $joined Sbeve#6493
+    """
     # Join can be none: handle it.
     if member.joined_at is None:
         await ctx.send(f'{member} has no join date.')
@@ -157,33 +170,57 @@ async def roll(
     ):
     """Rolls dice from input in NdN format.
     
-    The first N is the number of dice, the second N is the side count of the dice.
+The first N is the number of dice, the second N is the side count of the dice.
+Example: $roll 10d6
     """
     try:
-        rolls, limit = map(int, dice.split('d'))
+        rolls, num_sides = map(int, dice.split('d'))
+        if (num_sides < 1):
+            await ctx.send(
+                f'Your {num_sides}-dimensional {'object' if rolls == 1 else 'objects'}'
+                f' vanished into the {num_sides}th dimension.'
+            )
+            return
+
+        if (num_sides > 999):
+            await ctx.send(
+                f'Your {'sphere' if rolls == 1 else 'spheres'} rolled around.'
+            )
+            return
+
+        if (rolls > 300): # otherwise return message gets too long
+            await ctx.send(
+                f'Hundreds of dice clattered onto the floor, too many to count.\n'
+                f'You\'re gonna have to clean that up.'
+            )
+            return
+        if (rolls == 0):
+            await ctx.send(
+                f'You lamented not having any d{num_sides}s.'
+            )
+            return
+
+        if (rolls < 0):
+            rolls_list = [-random.randint(1, num_sides) for _ in range(0, rolls, -1)];
+            total = sum(rolls_list);
+            await ctx.send(f'''
+{abs(rolls)} d{num_sides}{'s' if rolls < -1 else ''} were unrolled and their results were:
+{rolls_list}
+respectively. Summed together that is {total}.
+''')
+            return
+
+        rolls_list = [random.randint(1, num_sides) for _ in range(rolls)];
+        total = sum(rolls_list);
+
+        await ctx.send(
+        f'''{rolls} d{num_sides}{'s' if rolls > 1 else ''} were rolled and their results were:
+{rolls_list}
+respectively. Summed together that is {total}.
+''')
     except Exception:
         await ctx.send('Format must be in NdN boi.')
         return
-
-    if (limit < 1):
-        await ctx.send(
-            f'Your {limit}-dimensional object vanished into the {limit}th dimension.'
-            )
-        return
-
-    prefix = '';
-    rolls_list = [];
-    total = 0;
-    for r in range(rolls):
-        roll = random.randint(1, limit)
-        total += roll
-        rolls_list.append(roll)
-        prefix = ', ';
-
-    result = f'''{rolls} d{limit}s were rolled and their results were:
-{rolls_list}
-respectively. Summed together that is {total}.'''
-    await ctx.send(result)
 
 @bot.command()
 @commands.has_role(STAFF_MEMBER_ROLE_NAME)
@@ -218,7 +255,9 @@ async def is_admin(
         ctx,
         member: discord.Member = commands.parameter(description="The member to check.")
     ):
-    """Checks whether a member is an admin."""
+    """Checks whether a member is an admin.
+
+    Example: $is_admin Sbeve#6493"""
     await ctx.send(f'{member.display_name} ' +
     f'{'has' if get(member.roles, name = ADMIN_ROLE_NAME) else 'does not have'} ' +
     f'the magical A powers.')
@@ -228,7 +267,9 @@ async def is_staff_member(
         ctx,
         member: discord.Member = commands.parameter(description="The member to check.")
     ):
-    """Checks whether a member is a staff member."""
+    """Checks whether a member is a staff member.
+
+    Example: $is_admin Sbeve#6493"""
     await ctx.send(f'{member.display_name} ' +
     f'{'has' if get(member.roles, name = STAFF_MEMBER_ROLE_NAME) else 'does not have'} ' +
     f'the magical Super Mario powers.')
