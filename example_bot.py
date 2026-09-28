@@ -110,6 +110,8 @@ async def create_modmail_channel(
         reason=reason,
         category=category
     )
+    await logs_channel.send(
+            f'Modmail channel <#{new_channel.id}> created for <@{user_for.id}>')
 
     # an id was used. go to the next one
     config["MODMAIL_NEXT_ID"] += 1
