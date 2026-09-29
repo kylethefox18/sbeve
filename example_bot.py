@@ -1,11 +1,12 @@
-import random
-from datetime import datetime
-import os
-from dotenv import load_dotenv
 import json
+import os
+import random
+
+import anyio
 import discord
 from discord.ext import commands
 from discord.utils import get
+from dotenv import load_dotenv
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -14,7 +15,8 @@ with open('config.json', 'r') as f:
     config = json.load(f)
 
 LOGS_CHANNEL_ID = config['LOGS_CHANNEL_ID']
-ON_OFF_CHANNEL_ID = config['ON_OFF_CHANNEL_ID']
+MODMAIL_CATEGORY_ID = config['MODMAIL_CATEGORY_ID']
+ARCHIVE_CATEGORY_ID = config['ARCHIVE_CATEGORY_ID']
 ADMIN_ROLE_NAME = config['ADMIN_ROLE_NAME']
 STAFF_MEMBER_ROLE_NAME = config['STAFF_MEMBER_ROLE_NAME']
 STAFF_MEMBER_ROLE_ID = config['STAFF_MEMBER_ROLE_ID']
@@ -31,7 +33,8 @@ class PersistentCounter(discord.ui.View):
     # When pressed, this increments the number displayed.
     @discord.ui.button(label='0', style=discord.ButtonStyle.primary,
                        custom_id='persistent_counter:counter')
-    async def count(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def count(
+            self, interaction: discord.Interaction, button: discord.ui.Button):
         number = int(button.label) if button.label else 0
         button.label = str(number + 1)
         """Increases count on pressed button by 1."""
@@ -58,26 +61,24 @@ class PersistentModmailButton(discord.ui.View):
                            button: discord.ui.Button):
         # Log button press
         action_msg = (f'{interaction.user.name} (ID {interaction.user.id}) ' +
-        f'pressed open modmail button.')
+                      'pressed open modmail button.')
         print(action_msg)
         await logs_channel.send(action_msg)
 
         # create a new modmail channel
         modmail_channel = await create_modmail_channel(
                 interaction.guild,
-                interaction.channel.category,
                 interaction.user,
                 "Open Modmail button pressed")
 
         await interaction.response.send_message(
-                f'{interaction.user.name}: Modmail opened, in <#{modmail_channel.id}>',
+                f'{interaction.user.name}: '
+                f'Modmail opened, in <#{modmail_channel.id}>',
                 ephemeral=True
                 )
-        
 
 async def create_modmail_channel(
     guild: discord.Guild,
-    category: discord.CategoryChannel,
     user_for: discord.User,
     reason: str
     ):
@@ -86,7 +87,6 @@ async def create_modmail_channel(
     This is a helper function for use with the 'open modmail button'.
     Keyword arguments:
     guild -- the guild in which to create the channel
-    category -- the category in which to create the channel
     user_for -- the member for which to create the channel
     reason -- the reason for creating the channel
     """
@@ -100,15 +100,15 @@ async def create_modmail_channel(
     }
 
     # make sure we are in a guild
-    assert guild is not None 
+    assert guild is not None
 
     # create the channel
     new_channel = await guild.create_text_channel(
-        name=f'Modmail {modmail_id}',
+        name=f'modmail-ticket-{modmail_id}',
         overwrites=overwrites,
         topic=str(user_for.id),
         reason=reason,
-        category=category
+        category=guild.get_channel(MODMAIL_CATEGORY_ID)
     )
     await logs_channel.send(
             f'Modmail channel <#{new_channel.id}> created for <@{user_for.id}>')
@@ -117,7 +117,7 @@ async def create_modmail_channel(
     config["MODMAIL_NEXT_ID"] += 1
 
     # record that the id was used in config
-    with open('config.json', 'w') as outfile:
+    async with await anyio.open_file('config.json', 'w') as outfile:
         json.dump(config, outfile, sort_keys=True, indent=4)
 
     await new_channel.send(f'Hello <@{user_for.id}>\n'
@@ -137,19 +137,12 @@ class CustomBot(commands.Bot):
         # In order to do this, you must first send a message with the View.
         self.add_view(PersistentCounter())
         self.add_view(PersistentModmailButton())
-        
+
     async def on_ready(self):
         print(f'We have logged in as {self.user} (ID: {self.user.id})')
         print('--------')
         global logs_channel
         logs_channel = await bot.fetch_channel(LOGS_CHANNEL_ID)
-        global on_off_channel
-        on_off_channel = await bot.fetch_channel(ON_OFF_CHANNEL_ID)
-        await on_off_channel.send('Sbeve is actively sbeveing.')
-
-    async def close(self):
-        await on_off_channel.send('Sbeve ceases to actively sbeve.')
-        await super().close()
 
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)
@@ -199,7 +192,7 @@ Example: $add 2 3
 @bot.command()
 async def joined(
     ctx,
-    member: discord.Member = commands.parameter(
+    member: discord.Member = commands.parameter( # noqa: B008
         description="The member whose join date to check."
         )
     ):
@@ -222,11 +215,11 @@ async def counter(ctx: commands.Context):
 
 @bot.command()
 async def roll(
-    ctx, 
+    ctx,
     dice: str = commands.parameter(description="The NdN formatted string.")
     ):
     """Rolls dice from input in NdN format.
-    
+
 The first N is the number of dice, the second N is the side count of the dice.
 Example: $roll 10d6
     """
@@ -234,7 +227,7 @@ Example: $roll 10d6
         rolls, num_sides = map(int, dice.split('d'))
         if (num_sides < 1):
             await ctx.send(
-                f'Your {num_sides}-dimensional {'object' if rolls == 1 else 'objects'}'
+                f'Your {num_sides}-dimensional object{'' if rolls == 1 else 's'}'
                 f' vanished into the {num_sides}th dimension.'
             )
             return
@@ -247,8 +240,8 @@ Example: $roll 10d6
 
         if (rolls > 300): # otherwise return message gets too long
             await ctx.send(
-                f'Hundreds of dice clattered onto the floor, too many to count.\n'
-                f'You\'re gonna have to clean that up.'
+                'Hundreds of dice clattered onto the floor, too many to count.\n'
+                'You\'re gonna have to clean that up.'
             )
             return
         if (rolls == 0):
@@ -258,20 +251,20 @@ Example: $roll 10d6
             return
 
         if (rolls < 0):
-            rolls_list = [-random.randint(1, num_sides) for _ in range(0, rolls, -1)];
-            total = sum(rolls_list);
+            rolls_list = [-random.randint(1, num_sides) for _ in range(0, rolls, -1)]
+            total = sum(rolls_list)
             await ctx.send(f'''
-{abs(rolls)} d{num_sides}{'s' if rolls < -1 else ''} were unrolled and their results were:
+{-rolls} d{num_sides}{'s' if rolls < -1 else ''} were unrolled and their results were:
 {rolls_list}
 respectively. Summed together that is {total}.
 ''')
             return
 
-        rolls_list = [random.randint(1, num_sides) for _ in range(rolls)];
-        total = sum(rolls_list);
+        rolls_list = [random.randint(1, num_sides) for _ in range(rolls)]
+        total = sum(rolls_list)
 
-        await ctx.send(
-        f'''{rolls} d{num_sides}{'s' if rolls > 1 else ''} were rolled and their results were:
+        await ctx.send(f'''
+{rolls} d{num_sides}{'s' if rolls > 1 else ''} were rolled and their results were:
 {rolls_list}
 respectively. Summed together that is {total}.
 ''')
@@ -285,50 +278,71 @@ async def send_modmail_embed(ctx):
     """Sends the "Open Modmail" embed."""
     embed = discord.Embed(title="Modmail System",
                       description="Welcome to Modmail!",
-                      colour=0xff7800,
-                      timestamp=datetime.now())
-    
+                      colour=0xff7800)
+
     embed.set_author(name="Form of Communication")
-    
+
     embed.add_field(name="Purpose",
-                    value="If you click the button below, you will create a temporary "
-                    "chat inside of our server which will allow you to communicate with "
-                    "the staff team! You can voice your concerns, bring new ideas to the "
-                    "staff team or even ask any question regarding the server. You can "
-                    "even apply for the artist role this way!\n\nThis form of "
-                    "communication is to be taken seriously. Misuse or abuse of this "
-                    "feature will result in consequences.",
+                    value="If you click the button below, you will create a "
+                    "temporary chat inside of our server which will allow you to "
+                    "communicate with the staff team! You can voice your concerns, "
+                    "bring new ideas to the staff team or even ask any question "
+                    "regarding the server. You can even apply for the artist role "
+                    "this way!\n\n"
+                    "This form of communication is to be taken seriously. Misuse or "
+                    "abuse of this feature will result in consequences.",
                     inline=False)
-    
+
     embed.set_footer(
         text="The Anthro Inn Staff Team",
         icon_url="https://i.imgur.com/3V1A55G.png"
         )
-    
+
     await ctx.send(embed=embed, view=PersistentModmailButton())
+
+@bot.command()
+async def close_modmail(ctx):
+    """Closes the modmail channel it is called in."""
+    if ctx.channel.name.startswith("modmail-ticket-"):
+        await ctx.send('Closing ticket...')
+        await ctx.channel.edit(
+            name=f'archived-{ctx.channel.name}',
+            category=bot.get_channel(ARCHIVE_CATEGORY_ID)
+        )
+        user = await bot.fetch_user(int(ctx.channel.topic))
+        overwrite = ctx.channel.overwrites_for(user)
+        overwrite = discord.PermissionOverwrite(read_messages=False)
+        await ctx.channel.set_permissions(user, overwrite=overwrite)
+        return
+    else:
+        await ctx.send('This isn\'t a modmail ticket, silly!')
 
 @bot.command()
 async def is_admin(
         ctx,
-        member: discord.Member = commands.parameter(description="The member to check.")
+        member: discord.Member = commands.parameter( # noqa: B008
+            description="The member to check."
+            )
     ):
     """Checks whether a member is an admin.
 
     Example: $is_admin Sbeve#6493"""
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if get(member.roles, name = ADMIN_ROLE_NAME) else 'does not have'} ' +
-    f'the magical A powers.')
+    f'{'has' if get(member.roles, name = ADMIN_ROLE_NAME) else 'has not'} '
+    'the magical A powers.')
 
 @bot.command()
 async def is_staff_member(
         ctx,
-        member: discord.Member = commands.parameter(description="The member to check.")
+        member: discord.Member = commands.parameter( # noqa: B008
+            description="The member to check."
+        )
     ):
     """Checks whether a member is a staff member.
 
     Example: $is_admin Sbeve#6493"""
     await ctx.send(f'{member.display_name} ' +
-    f'{'has' if get(member.roles, name = STAFF_MEMBER_ROLE_NAME) else 'does not have'} ' +
-    f'the magical Super Mario powers.')
+    f'{'has' if get(member.roles, name = STAFF_MEMBER_ROLE_NAME) else 'has not'} '
+    'the magical Super Mario powers.')
 
 bot.run(BOT_TOKEN)
