@@ -118,7 +118,8 @@ async def create_modmail_channel(
 
     # record that the id was used in config
     async with await anyio.open_file('config.json', 'w') as outfile:
-        json.dump(config, outfile, sort_keys=True, indent=4)
+        json_string = json.dumps(config, sort_keys=True, indent=4)
+        await outfile.write(json_string)
 
     await new_channel.send(f'Hello <@{user_for.id}>\n'
                            'What can we help you with?')
@@ -305,15 +306,19 @@ async def close_modmail(ctx):
     """Closes the modmail channel it is called in."""
     if ctx.channel.name.startswith("modmail-ticket-"):
         await ctx.send('Closing ticket...')
-        await ctx.channel.edit(
-            name=f'archived-{ctx.channel.name}',
-            category=bot.get_channel(ARCHIVE_CATEGORY_ID)
-        )
-        user = await bot.fetch_user(int(ctx.channel.topic))
-        overwrite = ctx.channel.overwrites_for(user)
-        overwrite = discord.PermissionOverwrite(read_messages=False)
-        await ctx.channel.set_permissions(user, overwrite=overwrite)
-        return
+        # retrieve all the messages in the channel
+        user = await bot.fetch_user(ctx.channel.topic)
+        messages = [ message async for message in
+                    ctx.channel.history(limit=None, oldest_first=True)]
+
+        with open(
+                 f"modmail-logs/{ctx.channel.name}-{ctx.channel.topic}.md", "w"
+                 ) as file:
+            file.write(f"# Log of Modmail for {user.name} (ID {user.id})  \n")
+            for message in messages:
+                file.write(f"{message.author.name} (id {message.author.id}): "
+                           f"{message.content}  \n")
+
     else:
         await ctx.send('This isn\'t a modmail ticket, silly!')
 
