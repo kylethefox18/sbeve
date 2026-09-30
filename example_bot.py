@@ -14,8 +14,9 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-LOGS_CHANNEL_ID = config['LOGS_CHANNEL_ID']
+BOT_LOGS_CHANNEL_ID = config['BOT_LOGS_CHANNEL_ID']
 MODMAIL_CATEGORY_ID = config['MODMAIL_CATEGORY_ID']
+MODMAIL_LOGS_CHANNEL_ID = config['MODMAIL_LOGS_CHANNEL_ID']
 ARCHIVE_CATEGORY_ID = config['ARCHIVE_CATEGORY_ID']
 ADMIN_ROLE_NAME = config['ADMIN_ROLE_NAME']
 STAFF_MEMBER_ROLE_NAME = config['STAFF_MEMBER_ROLE_NAME']
@@ -143,7 +144,7 @@ class CustomBot(commands.Bot):
         print(f'We have logged in as {self.user} (ID: {self.user.id})')
         print('--------')
         global logs_channel
-        logs_channel = await bot.fetch_channel(LOGS_CHANNEL_ID)
+        logs_channel = await bot.fetch_channel(BOT_LOGS_CHANNEL_ID)
 
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)
@@ -306,18 +307,39 @@ async def close_modmail(ctx):
     """Closes the modmail channel it is called in."""
     if ctx.channel.name.startswith("modmail-ticket-"):
         await ctx.send('Closing ticket...')
-        # retrieve all the messages in the channel
+
+        # get the user for whom the channel is
         user = await bot.fetch_user(ctx.channel.topic)
+        # retrieve all the messages in the channel
         messages = [ message async for message in
                     ctx.channel.history(limit=None, oldest_first=True)]
 
-        with open(
-                 f"modmail-logs/{ctx.channel.name}-{ctx.channel.topic}.md", "w"
-                 ) as file:
-            file.write(f"# Log of Modmail for {user.name} (ID {user.id})  \n")
+        # parse modmail ticket's id and generate file path
+        modmail_id = int(ctx.channel.name.split('-')[2])
+        filename = f"{ctx.channel.name}-{ctx.channel.topic}.md"
+        filepath = f"modmail-logs/{filename}"
+
+        # use a set to only show user IDs the first time
+        ids_shown = {user.id,} # the user for's id is shown in header
+
+        # read all messages into the file
+        with open(filepath, "w") as file:
+            file.write(f"# Log of Modmail #{modmail_id} for {user.name} "
+                       f"(ID {user.id})  \n\n")
             for message in messages:
-                file.write(f"{message.author.name} (id {message.author.id}): "
-                           f"{message.content}  \n")
+                file.write(f"{message.author.name}"
+                    f"{'' if message.author.id in ids_shown
+                           else f" (id {message.author.id})"
+                    }: {message.content}  \n")
+                ids_shown.add(message.author.id)
+
+        # send the file to the logs channel
+        modmail_logs_channel = bot.get_channel(MODMAIL_LOGS_CHANNEL_ID)
+        with open(filepath, 'rb') as fp:
+            await modmail_logs_channel.send(f"Modmail #{modmail_id} for {user.name} "
+                "closed. Logs attached.",
+                file=discord.File(fp, filename)
+            )
 
     else:
         await ctx.send('This isn\'t a modmail ticket, silly!')
