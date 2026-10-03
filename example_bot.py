@@ -246,14 +246,14 @@ async def roll(
         rolls, num_sides = map(int, dice.split("d"))
         if num_sides < 1:
             await ctx.send(
-                f"Your {num_sides}-dimensional object{"" if rolls == 1 else "s"}"
+                f"Your {num_sides}-dimensional object{'' if rolls == 1 else 's'}"
                 f" vanished into the {num_sides}th dimension."
             )
             return
 
         if num_sides > 999:
             await ctx.send(
-                f"Your {"sphere" if rolls == 1 else "spheres"} rolled around."
+                f"Your {'sphere' if rolls == 1 else 'spheres'} rolled around."
             )
             return
 
@@ -347,7 +347,7 @@ async def close_modmail(ctx):
         await logs_channel.send(f"Closing and archiving modmail #{modmail_id}...")
 
         # record messages before ones with attachments
-        msgs_before_with_attachments = [""] # init with empty str for smth to append to
+        msgs_before_with_attachments = [""]  # init with empty str for smth to append to
         # record messages with attachments
         msgs_with_attachments = []
         # record attachments info messages
@@ -370,18 +370,29 @@ async def close_modmail(ctx):
                 logged_message = (
                     f"{message.author.name}"
                     f"{
-                        ""
+                        ''
                         if message.author.id in ids_shown
-                        else f" (id {message.author.id})"
+                        else f' (id {message.author.id})'
                     }"
-                    f" at {message.created_at.strftime("%d %b %H:%M")}"
+                    f" at {message.created_at.strftime('%d %b %H:%M')}"
                     f"{
-                        ""
+                        ''
                         if message.edited_at is None
-                        else f" (edited {message.edited_at.strftime("%d %b %H:%M")})"
+                        else f' (edited {message.edited_at.strftime("%d %b %H:%M")})'
                     }"
                     f": {message.content}  \n"
                 )
+
+                if len(message.stickers) > 0:  # if the message had stickers
+                    logged_message += (
+                        "The above message also had the following "
+                        + f"sticker{'' if len(message.stickers) == 1 else 's'}:  \n"
+                        + "  \n".join(
+                            [f"ID: `{sticker.id}`" for sticker in message.stickers]
+                        )
+                        + "  \n"
+                    )
+
                 ids_shown.add(message.author.id)
                 file.write(logged_message)
 
@@ -443,8 +454,10 @@ async def close_modmail(ctx):
             # header is necessary, otherwise error 418 if two attachments are sent
             # after each other
             buffer_msgs_before = io.BytesIO(
-                ("Messages between attachments:  \n" +
-                msgs_before_with_attachments[idx]).encode("utf-8")
+                (
+                    "Messages between attachments:  \n"
+                    + msgs_before_with_attachments[idx]
+                ).encode("utf-8")
             )
             # pass it into a discord.File
             file_msgs_before = discord.File(
@@ -460,13 +473,14 @@ async def close_modmail(ctx):
                 "The above message with attachments\n```"
                 f"{attachments_infos_all[idx]}\n```was sent by "
                 f"{msg.author.name} at <t:{int(msg.created_at.timestamp())}> "
-                f"({msg.created_at.strftime("%a %d %b %Y %H:%M")} UTC)."
+                f"({msg.created_at.strftime('%a %d %b %Y %H:%M')} UTC)."
             )
 
         # send the messages after the last attachment
         buffer_msgs_before = io.BytesIO(
-            ("Messages after last attachment:  \n" +
-            msgs_before_with_attachments[-1]).encode("utf-8")
+            (
+                "Messages after last attachment:  \n" + msgs_before_with_attachments[-1]
+            ).encode("utf-8")
         )
         # pass it into a discord.File
         file_msgs_before = discord.File(
@@ -476,8 +490,9 @@ async def close_modmail(ctx):
         # send the discord file
         await logs_thread.send(file=file_msgs_before)
 
-        await logs_channel.send(f"Modmail #{modmail_id} closed and archived: "
-            f"{logs_thread.jump_url}")
+        await logs_channel.send(
+            f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}"
+        )
         # delete the now completely archived thread
         await ctx.channel.delete(reason="Modmail completely archived.")
 
@@ -497,7 +512,7 @@ async def is_admin(
     Example: $is_admin Sbeve#6493"""
     await ctx.send(
         f"{member.display_name} "
-        + f"{"has" if get(member.roles, name=ADMIN_ROLE_NAME) else "has not"} "
+        + f"{'has' if get(member.roles, name=ADMIN_ROLE_NAME) else 'has not'} "
         "the magical A powers."
     )
 
@@ -514,7 +529,7 @@ async def is_staff_member(
     Example: $is_admin Sbeve#6493"""
     await ctx.send(
         f"{member.display_name} "
-        + f"{"has" if get(member.roles, name=STAFF_MEMBER_ROLE_NAME) else "has not"} "
+        + f"{'has' if get(member.roles, name=STAFF_MEMBER_ROLE_NAME) else 'has not'} "
         "the magical Super Mario powers."
     )
 

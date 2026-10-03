@@ -1,4 +1,4 @@
 .env
 bot-env/
-.config.json
+config.json
 modmail-logs/
