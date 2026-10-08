@@ -45,6 +45,7 @@ class PersistentCounter(discord.ui.View):
         """Increases count on pressed button by 1."""
 
         # Update the message with our updated selves
+
         await interaction.response.edit_message(view=self)
 
         # Tell user they interacted
@@ -150,6 +151,8 @@ class CustomBot(commands.Bot):
         # In order to do this, you must first send a message with the View.
         self.add_view(PersistentCounter())
         self.add_view(PersistentModmailButton())
+        # load Greetings extension
+        await self.load_extension('greetings')
 
     async def on_ready(self):
         print(f"We have logged in as {self.user} (ID: {self.user.id})")
@@ -320,10 +323,28 @@ async def send_modmail_embed(ctx):
     await ctx.send(embed=embed, view=PersistentModmailButton())
 
 
-# the size over which the bot won't download attachments: now about 20mb
-MAX_SAVED_ATTACHMENT_SIZE = 20000000
+@bot.command()
+@commands.has_role(STAFF_MEMBER_ROLE_NAME)
+async def get_sticker_from_id(
+    ctx,
+    sticker_id: int = commands.parameter(description="The ID of the sticker to get."),
+):
+    """Gets a sticker given its id.
+
+    In effect: takes in the id and returns:
+    https://cdn.discordapp.com/stickers/<sticker-id>.png
+
+    If the sticker is animated, you might need to go to
+    https://cdn.discordapp.com/stickers/<sticker-id>.json
+    download the file, and go to a site like
+    https://lottieto.com/json-to-gif
+    and convert the file to a GIF there.
+    """
+    await ctx.send(f"https://cdn.discordapp.com/stickers/{sticker_id}.png")
 
 
+# requires no privilege checking because everyone who can see the modmail channel
+# should have the right to close it
 @bot.command()
 async def close_modmail(ctx):
     """Closes the modmail channel it is called in."""
