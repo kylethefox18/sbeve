@@ -152,7 +152,7 @@ class CustomBot(commands.Bot):
         self.add_view(PersistentCounter())
         self.add_view(PersistentModmailButton())
         # load Greetings extension
-        await self.load_extension('greetings')
+        await self.load_extension('cogs.greetings')
 
     async def on_ready(self):
         print(f"We have logged in as {self.user} (ID: {self.user.id})")
