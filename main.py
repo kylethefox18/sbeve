@@ -76,20 +76,6 @@ bot = CustomBot(
     help_command=help_command,
 )
 
-
-@bot.event
-async def on_message(message):
-    if message.author == bot.user:
-        return
-
-    if message.content == "67":
-        await message.channel.send(
-            f"<@{message.author.id}>: Your parents don't love you."
-        )
-
-    await bot.process_commands(message)
-
-
 @bot.command()
 async def add(
     ctx,
