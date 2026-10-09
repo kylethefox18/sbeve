@@ -8,14 +8,15 @@ class Greetings(commands.Cog):
         self._last_member = None
 
     @commands.command()
-    async def hello(self, ctx, *, member: discord.Member= None):
+    async def hello(self, ctx, *, member: discord.Member = None):
         """Says hello"""
         member = member or ctx.author
         if self._last_member is None or self._last_member.id != member.id:
-            await ctx.send(f'Hello {member.name}!!!!!!!!')
+            await ctx.send(f"Hello {member.name}!!!!!!!!")
         else:
-            await ctx.send(f'Hello {member.name}... This feels familiar...')
+            await ctx.send(f"Hello {member.name}... This feels familiar...")
         self._last_member = member
+
 
 async def setup(bot):
     await bot.add_cog(Greetings(bot))

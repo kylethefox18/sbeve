@@ -1,0 +1,236 @@
+import os
+import random
+import warnings
+
+import discord
+from discord.ext import commands
+from discord.utils import get
+from dotenv import load_dotenv
+
+from config import config
+
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+BOT_LOGS_CHANNEL_ID = config["BOT_LOGS_CHANNEL_ID"]
+MODMAIL_CATEGORY_ID = config["MODMAIL_CATEGORY_ID"]
+MODMAIL_LOGS_CHANNEL_ID = config["MODMAIL_LOGS_CHANNEL_ID"]
+ARCHIVE_CATEGORY_ID = config["ARCHIVE_CATEGORY_ID"]
+ADMIN_ROLE_NAME = config["ADMIN_ROLE_NAME"]
+STAFF_MEMBER_ROLE_NAME = config["STAFF_MEMBER_ROLE_NAME"]
+STAFF_MEMBER_ROLE_ID = config["STAFF_MEMBER_ROLE_ID"]
+intents = discord.Intents.default()
+
+intents.message_content = True
+
+
+class CustomBot(commands.Bot):
+    # Suppress error on the User attribute being None
+    user: discord.ClientUser
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    async def setup_hook(self) -> None:
+        # load extensions/cogs
+        cogs_dir = os.fsencode("cogs")
+        for file in os.listdir(cogs_dir):
+            filename = os.fsdecode(file)
+
+            # __pycache__ is expected and ignored, __init__.py is also ignored
+            if filename == "__pycache__" or filename == "__init__.py":
+                pass
+            # if it's not a .py cog, why is it here? ignore it and warn
+            elif not filename.endswith(".py"):
+                warnings.warn(f"Skipping file of unexpected type: {filename}")
+            else:
+                # load the cog
+                await self.load_extension(f"cogs.{os.path.splitext(filename)[0]}")
+
+    async def on_ready(self):
+        print(f"We have logged in as {self.user} (ID: {self.user.id})")
+        print("--------")
+        global logs_channel
+        logs_channel = await bot.fetch_channel(BOT_LOGS_CHANNEL_ID)
+
+    async def on_command_error(self, context, exception, /):
+        await super().on_command_error(context, exception)
+        await context.channel.send(
+            f"Error in command {context.command.name}:\n"
+            f"Is your input correct? "
+            f"Check $help {context.command.name}."
+        )
+
+
+class MyHelpCommand(commands.DefaultHelpCommand):
+    def get_ending_note(self):
+        return "Type $help command for more info on a command.\nSbeve out."
+
+
+help_command = MyHelpCommand(no_category="Commands")
+
+bot = CustomBot(
+    command_prefix="$",
+    description="sbeve sbeves.",
+    intents=intents,
+    help_command=help_command,
+)
+
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    if message.content == "67":
+        await message.channel.send(
+            f"<@{message.author.id}>: Your parents don't love you."
+        )
+
+    await bot.process_commands(message)
+
+
+@bot.command()
+async def add(
+    ctx,
+    left: int = commands.parameter(description="One integer to add."),
+    right: int = commands.parameter(description="Another integer to add."),
+):
+    """Adds two integers together.
+
+    Example: $add 2 3
+    """
+    await ctx.send(left + right)
+
+
+@bot.command()
+async def joined(
+    ctx,
+    member: discord.Member = commands.parameter(  # noqa: B008
+        description="The member whose join date to check."
+    ),
+):
+    """Says when a member joined.
+
+    Member must be a member of the server.
+    Example: $joined Sbeve#6493
+    """
+    # Join can be none: handle it.
+    if member.joined_at is None:
+        await ctx.send(f"{member} has no join date.")
+    else:
+        await ctx.send(f"{member} joined {discord.utils.format_dt(member.joined_at)}")
+
+
+@bot.command()
+async def roll(
+    ctx, dice: str = commands.parameter(description="The NdN formatted string.")
+):
+    """Rolls dice from input in NdN format.
+
+    The first N is the number of dice, the second N is the side count of the dice.
+    Example: $roll 10d6
+    """
+    try:
+        rolls, num_sides = map(int, dice.split("d"))
+        if num_sides < 1:
+            await ctx.send(
+                f"Your {num_sides}-dimensional object{'' if rolls == 1 else 's'}"
+                f" vanished into the {num_sides}th dimension."
+            )
+            return
+
+        if num_sides > 999:
+            await ctx.send(
+                f"Your {'sphere' if rolls == 1 else 'spheres'} rolled around."
+            )
+            return
+
+        if rolls > 300:  # otherwise return message gets too long
+            await ctx.send(
+                "Hundreds of dice clattered onto the floor, too many to count.\n"
+                "You're gonna have to clean that up."
+            )
+            return
+        if rolls == 0:
+            await ctx.send(f"You lamented not having any d{num_sides}s.")
+            return
+
+        if rolls < 0:
+            rolls_list = [-random.randint(1, num_sides) for _ in range(0, rolls, -1)]
+            total = sum(rolls_list)
+            await ctx.send(f"""
+{-rolls} d{num_sides}{"s" if rolls < -1 else ""} were unrolled and their results were:
+{rolls_list}
+respectively. Summed together that is {total}.
+""")
+            return
+
+        rolls_list = [random.randint(1, num_sides) for _ in range(rolls)]
+        total = sum(rolls_list)
+
+        await ctx.send(f"""
+{rolls} d{num_sides}{"s" if rolls > 1 else ""} were rolled and their results were:
+{rolls_list}
+respectively. Summed together that is {total}.
+""")
+    except Exception:
+        await ctx.send("Format must be in NdN boi.")
+        return
+
+
+@bot.command()
+@commands.has_role(STAFF_MEMBER_ROLE_NAME)
+async def get_sticker_from_id(
+    ctx,
+    sticker_id: int = commands.parameter(description="The ID of the sticker to get."),
+):
+    """Gets a sticker given its id.
+
+    In effect: takes in the id and returns:
+    https://cdn.discordapp.com/stickers/<sticker-id>.png
+
+    If the sticker is animated, you might need to go to
+    https://cdn.discordapp.com/stickers/<sticker-id>.json
+    download the file, and go to a site like
+    https://lottieto.com/json-to-gif
+    and convert the file to a GIF there.
+    """
+    await ctx.send(f"https://cdn.discordapp.com/stickers/{sticker_id}.png")
+
+
+@bot.command()
+async def is_admin(
+    ctx,
+    member: discord.Member = commands.parameter(  # noqa: B008
+        description="The member to check."
+    ),
+):
+    """Checks whether a member is an admin.
+
+    Example: $is_admin Sbeve#6493"""
+    await ctx.send(
+        f"{member.display_name} "
+        + f"{'has' if get(member.roles, name=ADMIN_ROLE_NAME) else 'has not'} "
+        "the magical A powers."
+    )
+
+
+@bot.command()
+async def is_staff_member(
+    ctx,
+    member: discord.Member = commands.parameter(  # noqa: B008
+        description="The member to check."
+    ),
+):
+    """Checks whether a member is a staff member.
+
+    Example: $is_admin Sbeve#6493"""
+    await ctx.send(
+        f"{member.display_name} "
+        + f"{'has' if get(member.roles, name=STAFF_MEMBER_ROLE_NAME) else 'has not'} "
+        "the magical Super Mario powers."
+    )
+
+
+bot.run(BOT_TOKEN)

@@ -2,3 +2,4 @@
 bot-env/
 config.json
 modmail-logs/
+**/__pycache__/
