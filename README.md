@@ -5,7 +5,6 @@
 ```json
 {
     "ADMIN_ROLE_NAME": "(name of admin role)",
-    "BOT_LOGS_CHANNEL_ID": (channel id for bot logging),
     "MODMAIL_CATEGORY_ID": (category id for modmail),
     "MODMAIL_LOGS_CHANNEL_ID": (channel id for modmail logging),
     "MODMAIL_NEXT_ID": 0,
