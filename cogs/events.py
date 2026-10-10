@@ -15,5 +15,6 @@ class Events(commands.Cog):
                 f"<@{message.author.id}>: Your parents don't love you."
             )
 
+
 async def setup(bot):
     await bot.add_cog(Events(bot))

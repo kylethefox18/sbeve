@@ -30,7 +30,8 @@ class PersistentModmailButton(discord.ui.View):
         # if not in cache, fetch logs channel via API
         if logs_channel is None:
             logs_channel = await interaction.client.fetch_channel(
-                    config["BOT_LOGS_CHANNEL_ID"])
+                config["BOT_LOGS_CHANNEL_ID"]
+            )
 
         # Log button press
         action_msg = (
