@@ -25,28 +25,17 @@ class PersistentModmailButton(discord.ui.View):
     async def open_modmail(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
-        # Get logs channel
-        logs_channel = interaction.client.get_channel(config["BOT_LOGS_CHANNEL_ID"])
-        # if not in cache, fetch logs channel via API
-        if logs_channel is None:
-            logs_channel = await interaction.client.fetch_channel(
-                config["BOT_LOGS_CHANNEL_ID"]
-            )
-
         # Log button press
-        action_msg = (
+        print(
             f"{interaction.user.name} (ID {interaction.user.id}) "
             + "pressed open modmail button."
         )
-        print(action_msg)
-        await logs_channel.send(action_msg)
 
         # create a new modmail channel
         modmail_channel = await create_modmail_channel(
             interaction.guild,
             interaction.user,
             "Open Modmail button pressed",
-            logs_channel,
         )
 
         await interaction.response.send_message(
@@ -59,7 +48,6 @@ async def create_modmail_channel(
     guild: discord.Guild,
     user_for: discord.User,
     reason: str,
-    logs_channel: discord.TextChannel,
 ):
     """Creates a temporary modmail channel.
 
@@ -68,7 +56,6 @@ async def create_modmail_channel(
     guild -- the guild in which to create the channel
     user_for -- the member for which to create the channel
     reason -- the reason for creating the channel
-    logs_channel -- the bot's logging channel
     """
     modmail_id = config["MODMAIL_NEXT_ID"]
     overwrites = {
@@ -91,9 +78,7 @@ async def create_modmail_channel(
         reason=reason,
         category=guild.get_channel(config["MODMAIL_CATEGORY_ID"]),
     )
-    await logs_channel.send(
-        f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>"
-    )
+    print(f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>")
 
     # an id was used. go to the next one
     config["MODMAIL_NEXT_ID"] += 1
@@ -144,12 +129,6 @@ class Modmail(commands.Cog):
     # requires no privilege checking because everyone who can see the modmail channel
     # should have the right to close it
     async def close_modmail(self, ctx):
-        # Get logs channel
-        logs_channel = self.bot.get_channel(config["BOT_LOGS_CHANNEL_ID"])
-        # if not in cache, fetch logs channel via API
-        if logs_channel is None:
-            logs_channel = await self.bot.fetch_channel(config["BOT_LOGS_CHANNEL_ID"])
-
         """Closes the modmail channel it is called in."""
         if ctx.channel.name.startswith("modmail-ticket-"):
             await ctx.send("Closing ticket...")
@@ -170,7 +149,7 @@ class Modmail(commands.Cog):
             log_filepath = f"modmail-logs/{log_filename}"
 
             # log that modmail is being closed
-            await logs_channel.send(f"Closing and archiving modmail #{modmail_id}...")
+            print(f"Closing and archiving modmail #{modmail_id}...")
 
             # record messages before ones with attachments
             msgs_before_with_attachments = [
@@ -325,7 +304,7 @@ class Modmail(commands.Cog):
             # send the discord file
             await logs_thread.send(file=file_msgs_before)
 
-            await logs_channel.send(
+            print(
                 f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}"
             )
             # delete the now completely archived thread

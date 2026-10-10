@@ -5,17 +5,9 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from config import config
-
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-BOT_LOGS_CHANNEL_ID = config["BOT_LOGS_CHANNEL_ID"]
-MODMAIL_CATEGORY_ID = config["MODMAIL_CATEGORY_ID"]
-MODMAIL_LOGS_CHANNEL_ID = config["MODMAIL_LOGS_CHANNEL_ID"]
-ADMIN_ROLE_NAME = config["ADMIN_ROLE_NAME"]
-STAFF_MEMBER_ROLE_NAME = config["STAFF_MEMBER_ROLE_NAME"]
-STAFF_MEMBER_ROLE_ID = config["STAFF_MEMBER_ROLE_ID"]
 intents = discord.Intents.default()
 
 intents.message_content = True
@@ -47,8 +39,6 @@ class CustomBot(commands.Bot):
     async def on_ready(self):
         print(f"We have logged in as {self.user} (ID: {self.user.id})")
         print("--------")
-        global logs_channel
-        logs_channel = await bot.fetch_channel(BOT_LOGS_CHANNEL_ID)
 
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)

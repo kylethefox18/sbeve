@@ -6,12 +6,8 @@ from discord.utils import get
 
 from config import config
 
-BOT_LOGS_CHANNEL_ID = config["BOT_LOGS_CHANNEL_ID"]
-MODMAIL_CATEGORY_ID = config["MODMAIL_CATEGORY_ID"]
-MODMAIL_LOGS_CHANNEL_ID = config["MODMAIL_LOGS_CHANNEL_ID"]
 ADMIN_ROLE_NAME = config["ADMIN_ROLE_NAME"]
 STAFF_MEMBER_ROLE_NAME = config["STAFF_MEMBER_ROLE_NAME"]
-STAFF_MEMBER_ROLE_ID = config["STAFF_MEMBER_ROLE_ID"]
 intents = discord.Intents.default()
 
 
