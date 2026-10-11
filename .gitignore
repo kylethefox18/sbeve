@@ -3,3 +3,4 @@ bot-env/
 config.json
 modmail-logs/
 **/__pycache__/
+cogs/forb_or_orb_info.json

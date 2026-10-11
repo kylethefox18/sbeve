@@ -26,9 +26,11 @@ class CustomBot(commands.Bot):
         for file in os.listdir(cogs_dir):
             filename = os.fsdecode(file)
 
-            # __pycache__ is expected and ignored, __init__.py is also ignored
-            if filename == "__pycache__" or filename == "__init__.py":
+            # list of known ignorable files
+            ignorable = { "__pycache__", "__init__.py", "forb_or_borb_info.json"}
+            if filename in ignorable:
                 pass
+
             # if it's not a .py cog, why is it here? ignore it and warn
             elif not filename.endswith(".py"):
                 warnings.warn(f"Skipping file of unexpected type: {filename}")

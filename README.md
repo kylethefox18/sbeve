@@ -12,3 +12,11 @@
     "STAFF_MEMBER_ROLE_NAME": "(name of staff role)"
 }
 ```
+- Adjust the forb\_or\_borb\_info.json file in cogs:
+```json
+{
+    "borb_role_id": (borb role id),
+    "forb_role_id": (forb role id),
+    "forbborb_msg_id": (forbborb reaction message id: autoset by $send_forbborb_msg)
+}
+```
