@@ -6,8 +6,6 @@ from discord.utils import get
 
 from config import config
 
-ADMIN_ROLE_NAME = config["ADMIN_ROLE_NAME"]
-STAFF_MEMBER_ROLE_NAME = config["STAFF_MEMBER_ROLE_NAME"]
 intents = discord.Intents.default()
 
 
@@ -110,7 +108,7 @@ respectively. Summed together that is {total}.
             return
 
     @commands.command()
-    @commands.has_role(STAFF_MEMBER_ROLE_NAME)
+    @commands.has_role(config["STAFF_MEMBER_ROLE_NAME"])
     async def get_sticker_from_id(
         self,
         ctx,
@@ -144,7 +142,7 @@ respectively. Summed together that is {total}.
         Example: $is_admin {bot_name}"""
         await ctx.send(
             f"{member.display_name} "
-            + f"{'has' if get(member.roles, name=ADMIN_ROLE_NAME) else 'has not'} "
+            + f"{'has' if get(member.roles, name=config["ADMIN_ROLE_NAME"]) else 'has not'} "
             "the magical A powers."
         )
 
@@ -161,7 +159,7 @@ respectively. Summed together that is {total}.
         Example: $is_staff_member {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
-                'has' if get(member.roles, name=STAFF_MEMBER_ROLE_NAME) else 'has not'
+                'has' if get(member.roles, name=config["STAFF_MEMBER_ROLE_NAME"]) else 'has not'
             } "
             "the magical Super Mario powers."
         )
