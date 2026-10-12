@@ -142,7 +142,7 @@ respectively. Summed together that is {total}.
         Example: $is_admin {bot_name}"""
         await ctx.send(
             f"{member.display_name} "
-            + f"{'has' if get(member.roles, name=config["ADMIN_ROLE_NAME"]) else 'has not'} "
+            + f"{'has' if get(member.roles, name=config['ADMIN_ROLE_NAME']) else 'has not'} "
             "the magical A powers."
         )
 
@@ -159,7 +159,9 @@ respectively. Summed together that is {total}.
         Example: $is_staff_member {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
-                'has' if get(member.roles, name=config["STAFF_MEMBER_ROLE_NAME"]) else 'has not'
+                'has'
+                if get(member.roles, name=config['STAFF_MEMBER_ROLE_NAME'])
+                else 'has not'
             } "
             "the magical Super Mario powers."
         )

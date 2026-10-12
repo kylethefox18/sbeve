@@ -9,12 +9,13 @@ forbborb_info_path = Path(__file__).resolve().parent / "forb_or_borb_info.json"
 with open(forbborb_info_path, "r") as f:
     info = json.load(f)
 
+
 class ForbOrBorb(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.emoji_to_role = {
             discord.PartialEmoji(name="🦊"): info["forb_role_id"],
-            discord.PartialEmoji(name="🐦"): info["borb_role_id"]
+            discord.PartialEmoji(name="🐦"): info["borb_role_id"],
         }
 
     @commands.Cog.listener()
@@ -101,6 +102,7 @@ class ForbOrBorb(commands.Cog):
         async with await anyio.open_file(forbborb_info_path, "w") as outfile:
             json_string = json.dumps(info, sort_keys=True, indent=4)
             await outfile.write(json_string)
+
 
 async def setup(bot):
     await bot.add_cog(ForbOrBorb(bot))

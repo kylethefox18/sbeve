@@ -304,9 +304,7 @@ class Modmail(commands.Cog):
             # send the discord file
             await logs_thread.send(file=file_msgs_before)
 
-            print(
-                f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}"
-            )
+            print(f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}")
             # delete the now completely archived thread
             await ctx.channel.delete(reason="Modmail completely archived.")
 

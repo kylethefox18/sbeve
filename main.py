@@ -27,7 +27,7 @@ class CustomBot(commands.Bot):
             filename = os.fsdecode(file)
 
             # list of known ignorable files
-            ignorable = { "__pycache__", "__init__.py", "forb_or_borb_info.json"}
+            ignorable = {"__pycache__", "__init__.py", "forb_or_borb_info.json"}
             if filename in ignorable:
                 pass
 
@@ -54,6 +54,7 @@ class CustomBot(commands.Bot):
 class MyHelpCommand(commands.DefaultHelpCommand):
     def get_ending_note(self):
         return "Type $help command for more info on a command.\nSbeve out."
+
     def get_command_signature(self, command):
         if command.help:
             command.help = command.help.format(bot_name=bot.user)
