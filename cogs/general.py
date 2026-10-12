@@ -39,7 +39,7 @@ class General(commands.Cog):
         """Says when a member joined.
 
         Member must be a member of the server.
-        Example: $joined Sbeve#6493
+        Example: $joined "{bot_name}"
         """
         # Join can be none: handle it.
         if member.joined_at is None:
@@ -141,7 +141,7 @@ respectively. Summed together that is {total}.
     ):
         """Checks whether a member is an admin.
 
-        Example: $is_admin Sbeve#6493"""
+        Example: $is_admin {bot_name}"""
         await ctx.send(
             f"{member.display_name} "
             + f"{'has' if get(member.roles, name=ADMIN_ROLE_NAME) else 'has not'} "
@@ -158,7 +158,7 @@ respectively. Summed together that is {total}.
     ):
         """Checks whether a member is a staff member.
 
-        Example: $is_admin Sbeve#6493"""
+        Example: $is_staff_member {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
                 'has' if get(member.roles, name=STAFF_MEMBER_ROLE_NAME) else 'has not'

@@ -54,6 +54,11 @@ class CustomBot(commands.Bot):
 class MyHelpCommand(commands.DefaultHelpCommand):
     def get_ending_note(self):
         return "Type $help command for more info on a command.\nSbeve out."
+    def get_command_signature(self, command):
+        if command.help:
+            command.help = command.help.format(bot_name=bot.user)
+
+        return super().get_command_signature(command)
 
 
 help_command = MyHelpCommand()
