@@ -5,7 +5,9 @@ import anyio
 import discord
 from discord.ext import commands
 
-forbborb_info_path = Path(__file__).resolve().parent / "forb_or_borb_info.json"
+forbborb_info_path = (
+    Path(__file__).resolve().parent.parent / "config" / "forbborb_config.json"
+)
 with open(forbborb_info_path, "r") as f:
     info = json.load(f)
 

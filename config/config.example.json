@@ -1,0 +1,9 @@
+{
+    "ADMIN_ROLE_NAME": "admin",
+    "MODMAIL_CATEGORY_ID": 0,
+    "MODMAIL_LOGS_CHANNEL_ID": 1,
+    "MODMAIL_NEXT_ID": 0,
+    "STAFF_MEMBER_ROLE_ID": 2,
+    "STAFF_MEMBER_ROLE_NAME": "staff-member",
+    "IGNORED_COGS": ["add the names of", "cogs you don't want to use", "here"]
+}

@@ -5,6 +5,8 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
+from config import config
+
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
@@ -28,6 +30,9 @@ class CustomBot(commands.Bot):
 
             # list of known ignorable files
             ignorable = {"__pycache__", "__init__.py", "forb_or_borb_info.json"}
+            for cog in config["IGNORED_COGS"]:
+                ignorable.add(cog)
+
             if filename in ignorable:
                 pass
 
