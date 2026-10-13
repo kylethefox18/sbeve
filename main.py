@@ -1,11 +1,17 @@
+import logging
 import os
-import warnings
 
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from config import config
+
+# root logger
+logging.basicConfig(level=logging.INFO)
+
+# handles logging for this code
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
@@ -29,7 +35,7 @@ class CustomBot(commands.Bot):
             filename = os.fsdecode(file)
 
             # list of known ignorable files
-            ignorable = {"__pycache__", "__init__.py", "forb_or_borb_info.json"}
+            ignorable = {"__pycache__", "__init__.py"}
             for cog in config["IGNORED_COGS"]:
                 ignorable.add(cog)
 
@@ -38,14 +44,14 @@ class CustomBot(commands.Bot):
 
             # if it's not a .py cog, why is it here? ignore it and warn
             elif not filename.endswith(".py"):
-                warnings.warn(f"Skipping file of unexpected type: {filename}")
+                logger.warning(f"Skipping file of unexpected type: {filename}")
             else:
                 # load the cog
                 await self.load_extension(f"cogs.{os.path.splitext(filename)[0]}")
 
     async def on_ready(self):
-        print(f"We have logged in as {self.user} (ID: {self.user.id})")
-        print("--------")
+        logger.info(f"We have logged in as {self.user} (ID: {self.user.id})")
+        logger.info("--------")
 
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)

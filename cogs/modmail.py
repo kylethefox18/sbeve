@@ -1,11 +1,14 @@
 import io
 import json
+import logging
 
 import anyio
 import discord
 from discord.ext import commands
 
 from config import config, config_path
+
+logger = logging.getLogger(__name__)
 
 
 # A simple View for a persistent "Open Modmail" button
@@ -26,7 +29,7 @@ class PersistentModmailButton(discord.ui.View):
         self, interaction: discord.Interaction, button: discord.ui.Button
     ):
         # Log button press
-        print(
+        logger.info(
             f"{interaction.user.name} (ID {interaction.user.id}) "
             + "pressed open modmail button."
         )
@@ -78,7 +81,7 @@ async def create_modmail_channel(
         reason=reason,
         category=guild.get_channel(config["MODMAIL_CATEGORY_ID"]),
     )
-    print(f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>")
+    logger.info(f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>")
 
     # an id was used. go to the next one
     config["MODMAIL_NEXT_ID"] += 1
@@ -149,7 +152,7 @@ class Modmail(commands.Cog):
             log_filepath = f"modmail-logs/{log_filename}"
 
             # log that modmail is being closed
-            print(f"Closing and archiving modmail #{modmail_id}...")
+            logger.info(f"Closing and archiving modmail #{modmail_id}...")
 
             # record messages before ones with attachments
             msgs_before_with_attachments = [
@@ -304,7 +307,9 @@ class Modmail(commands.Cog):
             # send the discord file
             await logs_thread.send(file=file_msgs_before)
 
-            print(f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}")
+            logger.info(
+                f"Modmail #{modmail_id} closed and archived: {logs_thread.jump_url}"
+            )
             # delete the now completely archived thread
             await ctx.channel.delete(reason="Modmail completely archived.")
 
