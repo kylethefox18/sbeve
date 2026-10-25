@@ -1,4 +1,4 @@
-# Log of Modmail #0 for coolkyle2018 (ID {1})  
+# Log of Modmail #0 for coolkyle2018 (ID 1)  
 
 Sbeve (id 0) at 25 Oct 15:32: Hello <@1>
 What can we help you with?  
