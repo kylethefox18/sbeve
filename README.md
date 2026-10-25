@@ -1,5 +1,5 @@
 # Sbeve: A Discord bot that does stuff mostly
-You can try Sbeve out [here](https://discord.gg/RVNBBA3kfY)
+You can try Sbeve out [here](https://discord.gg/RVNBBA3kfY)  
 These are some commands Sbeve offers:
 ```
 sbeve sbeves.
