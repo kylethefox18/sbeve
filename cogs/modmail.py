@@ -172,7 +172,7 @@ class Modmail(commands.Cog):
             with open(log_filepath, "w") as file:
                 file.write(
                     f"# Log of Modmail #{modmail_id} for {user.name} "
-                    "(ID {user.id})  \n\n"
+                    f"(ID {user.id})  \n\n"
                 )
 
                 # go through all messages
