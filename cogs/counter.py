@@ -39,7 +39,7 @@ class Counter(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.is_owner()
     async def start_counter(self, ctx: commands.Context):
         """Starts a counter for pressing."""

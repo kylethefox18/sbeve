@@ -7,7 +7,7 @@ class Greetings(commands.Cog):
         self.bot = bot
         self._last_member = None
 
-    @commands.command()
+    @commands.hybrid_command()
     async def hello(self, ctx, *, member: discord.Member = None):
         """Says hello"""
         member = member or ctx.author

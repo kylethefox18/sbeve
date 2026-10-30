@@ -13,7 +13,7 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command()
     async def add(
         self,
         ctx,
@@ -26,7 +26,7 @@ class General(commands.Cog):
         """
         await ctx.send(left + right)
 
-    @commands.command()
+    @commands.hybrid_command()
     async def joined(
         self,
         ctx,
@@ -47,7 +47,7 @@ class General(commands.Cog):
                 f"{member} joined {discord.utils.format_dt(member.joined_at)}"
             )
 
-    @commands.command()
+    @commands.hybrid_command()
     async def roll(
         self,
         ctx,
@@ -107,12 +107,12 @@ respectively. Summed together that is {total}.
             await ctx.send("Format must be in NdN boi.")
             return
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_role(config["STAFF_MEMBER_ROLE_NAME"])
     async def get_sticker_from_id(
         self,
         ctx,
-        sticker_id: int = commands.parameter(
+        sticker_id: str = commands.parameter(
             description="The ID of the sticker to get."
         ),
     ):
@@ -127,9 +127,11 @@ respectively. Summed together that is {total}.
         https://lottieto.com/json-to-gif
         and convert the file to a GIF there.
         """
+
+        sticker_id = int(sticker_id)
         await ctx.send(f"https://cdn.discordapp.com/stickers/{sticker_id}.png")
 
-    @commands.command()
+    @commands.hybrid_command()
     async def is_admin(
         self,
         ctx,
@@ -141,12 +143,15 @@ respectively. Summed together that is {total}.
 
         Example: $is_admin {bot_name}"""
         await ctx.send(
-            f"{member.display_name} "
-            + f"{'has' if get(member.roles, name=config['ADMIN_ROLE_NAME']) else 'has not'} "
+            f"{member.display_name} " + f"{
+                'has'
+                if get(member.roles, name=config['ADMIN_ROLE_NAME'])
+                else 'has not'
+            } "
             "the magical A powers."
         )
 
-    @commands.command()
+    @commands.hybrid_command()
     async def is_staff_member(
         self,
         ctx,

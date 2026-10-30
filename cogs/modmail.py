@@ -99,7 +99,7 @@ class Modmail(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.has_role(config["STAFF_MEMBER_ROLE_NAME"])
     async def send_modmail_embed(self, ctx):
         """Sends the "Open Modmail" embed."""
@@ -128,7 +128,7 @@ class Modmail(commands.Cog):
 
         await ctx.send(embed=embed, view=PersistentModmailButton())
 
-    @commands.command()
+    @commands.hybrid_command()
     # requires no privilege checking because everyone who can see the modmail channel
     # should have the right to close it
     async def close_modmail(self, ctx):

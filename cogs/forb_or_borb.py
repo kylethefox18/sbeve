@@ -90,7 +90,7 @@ class ForbOrBorb(commands.Cog):
         # Finally, remove the role.
         await member.remove_roles(role)
 
-    @commands.command()
+    @commands.hybrid_command()
     @commands.is_owner()
     async def send_forbborb_msg(self, ctx: commands.Context):
         """Sends the forb vs borb message."""
