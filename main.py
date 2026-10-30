@@ -50,6 +50,11 @@ class CustomBot(commands.Bot):
                 # load the cog
                 await self.load_extension(f"cogs.{os.path.splitext(filename)[0]}")
 
+            # format help text for all commands
+            for command in bot.walk_commands():
+                if command.help:
+                    command.help = command.help.format(bot_name=bot.user)
+
         self.tree.copy_global_to(guild=GUILD)
         await self.tree.sync(guild=GUILD)
 
@@ -71,9 +76,6 @@ class MyHelpCommand(commands.DefaultHelpCommand):
         return "Type $help command for more info on a command.\nSbeve out."
 
     def get_command_signature(self, command):
-        if command.help:
-            command.help = command.help.format(bot_name=bot.user)
-
         return super().get_command_signature(command)
 
 
