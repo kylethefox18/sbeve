@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
+GUILD = discord.Object(id=config["GUILD_ID"])
 intents = discord.Intents.default()
 
 intents.message_content = True
@@ -48,6 +49,9 @@ class CustomBot(commands.Bot):
             else:
                 # load the cog
                 await self.load_extension(f"cogs.{os.path.splitext(filename)[0]}")
+
+        self.tree.copy_global_to(guild=GUILD)
+        await self.tree.sync(guild=GUILD)
 
     async def on_ready(self):
         logger.info(f"We have logged in as {self.user} (ID: {self.user.id})")
