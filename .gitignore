@@ -4,4 +4,6 @@ config.json
 modmail-logs/
 **/__pycache__/
 config/config.json
+config/config.toml
+config/forbborb_config.toml
 config/forbborb_config.json

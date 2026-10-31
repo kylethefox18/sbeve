@@ -1,4 +1,5 @@
 import json
+import tomllib
 from pathlib import Path
 
 import anyio
@@ -6,10 +7,10 @@ import discord
 from discord.ext import commands
 
 forbborb_info_path = (
-    Path(__file__).resolve().parent.parent / "config" / "forbborb_config.json"
+    Path(__file__).resolve().parent.parent / "config" / "forbborb_config.toml"
 )
-with open(forbborb_info_path, "r") as f:
-    info = json.load(f)
+with open(forbborb_info_path, "rb") as f:
+    info = tomllib.load(f)
 
 
 class ForbOrBorb(commands.Cog):

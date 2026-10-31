@@ -1,6 +1,6 @@
-import json
+import tomllib
 from pathlib import Path
 
-config_path = Path(__file__).resolve().parent / "config" / "config.json"
-with open(config_path, "r") as f:
-    config = json.load(f)
+config_path = Path(__file__).resolve().parent / "config" / "config.toml"
+with open(config_path, "rb") as f:
+    config = tomllib.load(f)

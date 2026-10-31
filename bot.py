@@ -17,6 +17,7 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 GUILD = discord.Object(id=config["GUILD_ID"])
+print(GUILD)
 intents = discord.Intents.default()
 
 intents.message_content = True
