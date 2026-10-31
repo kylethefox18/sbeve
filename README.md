@@ -10,6 +10,7 @@ ForbOrBorb:
   send_forbborb_msg   Sends the forb vs borb message.
 General:
   add                 Adds two integers together.
+  change_nickname     
   get_sticker_from_id Gets a sticker given its id.
   is_admin            Checks whether a member is an admin.
   is_staff_member     Checks whether a member is a staff member.
@@ -23,7 +24,7 @@ Modmail:
 ​No Category:
   help                Shows this message
 
-Type $help command for more info on a command.
+Send the command "help command" for more info on a command.
 Sbeve out.
 ```
 ## Misc notes
@@ -54,4 +55,5 @@ Commands currently restricted by the bot are:
 `start_counter` to bot owner            (and people with administrator privileges)  
 `send_forbborb_msg` to bot owner        (and people with administrator privileges)  
 `send_modmail_embed` to admins          (and people with administrator privileges)  
+`change_nickname` to admins             (and people with administrator privileges)  
 You can set overrides as so, or differently if you wish.  
