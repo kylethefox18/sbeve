@@ -40,6 +40,7 @@ class Counter(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
+    @commands.guild_only()
     @commands.check_any(
         commands.is_owner(),
         commands.has_guild_permissions(administrator=True),

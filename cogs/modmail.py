@@ -105,6 +105,7 @@ class Modmail(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
+    @commands.guild_only()
     @commands.check_any(
         commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
@@ -137,6 +138,7 @@ class Modmail(commands.Cog):
         await ctx.send(embed=embed, view=PersistentModmailButton())
 
     @commands.hybrid_command()
+    @commands.guild_only()
     # requires no privilege checking because everyone who can see the modmail channel
     # should have the right to close it
     async def close_modmail(self, ctx):

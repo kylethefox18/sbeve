@@ -14,6 +14,7 @@ class General(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
+    @commands.guild_only()
     async def add(
         self,
         ctx,
@@ -27,6 +28,7 @@ class General(commands.Cog):
         await ctx.send(left + right)
 
     @commands.hybrid_command()
+    @commands.guild_only()
     async def joined(
         self,
         ctx,
@@ -48,6 +50,7 @@ class General(commands.Cog):
             )
 
     @commands.hybrid_command()
+    @commands.guild_only()
     async def roll(
         self,
         ctx,
@@ -108,6 +111,7 @@ respectively. Summed together that is {total}.
             return
 
     @commands.hybrid_command()
+    @commands.guild_only()
     @commands.check_any(
         commands.has_role(config["staff_member_role_id"]),
         commands.has_guild_permissions(administrator=True),
@@ -135,6 +139,7 @@ respectively. Summed together that is {total}.
         await ctx.send(f"https://cdn.discordapp.com/stickers/{sticker_id}.png")
 
     @commands.hybrid_command()
+    @commands.guild_only()
     async def is_admin(
         self,
         ctx,
@@ -153,6 +158,7 @@ respectively. Summed together that is {total}.
         )
 
     @commands.hybrid_command()
+    @commands.guild_only()
     async def is_staff_member(
         self,
         ctx,
@@ -173,6 +179,7 @@ respectively. Summed together that is {total}.
         )
 
     @commands.hybrid_command()
+    @commands.guild_only()
     @commands.check_any(
         commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),

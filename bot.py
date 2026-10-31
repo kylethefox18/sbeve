@@ -68,8 +68,13 @@ class CustomBot(commands.Bot):
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)
 
-        # tell the user nothing if the reason they can't run is no role
+        # tell the user nothing if the reason they can't run is no privilege
         if isinstance(exception, commands.CheckAnyFailure):
+            return
+
+        # tell the user they can't use commands in dms
+        if isinstance(exception, commands.NoPrivateMessage):
+            await context.channel.send("Commands cannot be used in DMs.")
             return
 
         await context.channel.send(
