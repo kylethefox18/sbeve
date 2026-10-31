@@ -64,6 +64,11 @@ class CustomBot(commands.Bot):
 
     async def on_command_error(self, context, exception, /):
         await super().on_command_error(context, exception)
+
+        # tell the user nothing if the reason they can't run is no role
+        if isinstance(exception, commands.CheckAnyFailure):
+            return
+
         await context.channel.send(
             f"Error in command {context.command.name}:\n"
             f"Is your input correct? "

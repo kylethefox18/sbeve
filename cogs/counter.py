@@ -40,7 +40,10 @@ class Counter(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
-    @commands.is_owner()
+    @commands.check_any(
+        commands.is_owner(),
+        commands.has_guild_permissions(administrator=True),
+    )
     async def start_counter(self, ctx: commands.Context):
         """Starts a counter for pressing."""
         await ctx.send("Number bigger button", view=PersistentCounter())

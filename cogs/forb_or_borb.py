@@ -91,7 +91,10 @@ class ForbOrBorb(commands.Cog):
         await member.remove_roles(role)
 
     @commands.hybrid_command()
-    @commands.is_owner()
+    @commands.check_any(
+        commands.is_owner(),
+        commands.has_guild_permissions(administrator=True),
+    )
     async def send_forbborb_msg(self, ctx: commands.Context):
         """Sends the forb vs borb message."""
         forbborb_msg = await ctx.send("FORB OR BORB?")

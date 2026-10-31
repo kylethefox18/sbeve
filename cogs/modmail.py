@@ -100,7 +100,10 @@ class Modmail(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
-    @commands.has_role(config["STAFF_MEMBER_ROLE_NAME"])
+    @commands.check_any(
+        commands.has_role(config["STAFF_MEMBER_ROLE_ID"]),
+        commands.has_guild_permissions(administrator=True),
+    )
     async def send_modmail_embed(self, ctx):
         """Sends the "Open Modmail" embed."""
         embed = discord.Embed(
