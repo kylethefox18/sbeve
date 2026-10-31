@@ -1,9 +1,0 @@
-{
-    "ADMIN_ROLE_ID": -1,
-    "MODMAIL_CATEGORY_ID": -1,
-    "MODMAIL_LOGS_CHANNEL_ID": -1,
-    "MODMAIL_NEXT_ID": 0,
-    "STAFF_MEMBER_ROLE_ID": -1,
-    "IGNORED_COGS": ["add the names of", "cogs you don't want to use", "here"],
-    "GUILD_ID": -1
-}
