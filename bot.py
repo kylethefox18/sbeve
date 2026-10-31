@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-GUILD = discord.Object(id=config["GUILD_ID"])
+GUILD = discord.Object(id=config["guild_id"])
 print(GUILD)
 intents = discord.Intents.default()
 
@@ -38,7 +38,7 @@ class CustomBot(commands.Bot):
 
             # list of known ignorable files
             ignorable = {"__pycache__", "__init__.py"}
-            for cog in config["IGNORED_COGS"]:
+            for cog in config["ignored_cogs"]:
                 ignorable.add(cog)
 
             if filename in ignorable:

@@ -71,7 +71,7 @@ async def create_modmail_channel(
         guild.default_role: discord.PermissionOverwrite(read_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
         user_for: discord.PermissionOverwrite(read_messages=True),
-        guild.get_role(config["STAFF_MEMBER_ROLE_ID"]): discord.PermissionOverwrite(
+        guild.get_role(config["staff_member_role_id"]): discord.PermissionOverwrite(
             read_messages=True
         ),
     }
@@ -85,7 +85,7 @@ async def create_modmail_channel(
         overwrites=overwrites,
         topic=str(user_for.id),
         reason=reason,
-        category=guild.get_channel(config["MODMAIL_CATEGORY_ID"]),
+        category=guild.get_channel(config["modmail_category_id"]),
     )
     logger.info(f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>")
 
@@ -107,7 +107,7 @@ class Modmail(commands.Cog):
 
     @commands.hybrid_command()
     @commands.check_any(
-        commands.has_role(config["STAFF_MEMBER_ROLE_ID"]),
+        commands.has_role(config["staff_member_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
     async def send_modmail_embed(self, ctx):
@@ -260,7 +260,7 @@ class Modmail(commands.Cog):
 
             # send the file to the logs channel
             modmail_logs_channel = self.bot.get_channel(
-                config["MODMAIL_LOGS_CHANNEL_ID"]
+                config["modmail_logs_channel_id"]
             )
             with open(log_filepath, "rb") as fp:
                 logs_message = await modmail_logs_channel.send(

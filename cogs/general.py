@@ -109,7 +109,7 @@ respectively. Summed together that is {total}.
 
     @commands.hybrid_command()
     @commands.check_any(
-        commands.has_role(config["STAFF_MEMBER_ROLE_ID"]),
+        commands.has_role(config["staff_member_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
     async def get_sticker_from_id(
@@ -147,7 +147,7 @@ respectively. Summed together that is {total}.
         Example: $is_admin {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
-                'has' if get(member.roles, id=config['ADMIN_ROLE_ID']) else 'has not'
+                'has' if get(member.roles, id=config['admin_role_id']) else 'has not'
             } "
             "the magical A powers."
         )
@@ -166,7 +166,7 @@ respectively. Summed together that is {total}.
         await ctx.send(
             f"{member.display_name} " + f"{
                 'has'
-                if get(member.roles, id=config['STAFF_MEMBER_ROLE_ID'])
+                if get(member.roles, id=config['staff_member_role_id'])
                 else 'has not'
             } "
             "the magical Super Mario powers."

@@ -1,15 +1,14 @@
-ADMIN_ROLE_ID = -1
+admin_role_id = -1
 
 # put the id of your server here
-GUILD_ID = -1
+guild_id = -1
 
 # put cogs you don't want to use here, like: ["forb_or_borb.py", "greetings.py"]
-IGNORED_COGS = [ ]
+ignored_cogs = [ ]
 
 # the category temp modmail channels should spawn in
-MODMAIL_CATEGORY_ID = -1
+modmail_category_id = -1
 # the channel the bot should log tickets to
-MODMAIL_LOGS_CHANNEL_ID = -1
-# if this is your first time using the bot, leaving it as 0 is best
-MODMAIL_NEXT_ID = 0
-STAFF_MEMBER_ROLE_ID = -1
+modmail_logs_channel_id = -1
+
+staff_member_role_id = -1
