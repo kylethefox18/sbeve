@@ -88,7 +88,7 @@ class MyHelpCommand(commands.DefaultHelpCommand):
 help_command = MyHelpCommand()
 
 bot = CustomBot(
-    command_prefix="$",
+    command_prefix=config["prefix"],
     description="sbeve sbeves.",
     intents=intents,
     help_command=help_command,

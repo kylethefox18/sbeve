@@ -172,6 +172,22 @@ respectively. Summed together that is {total}.
             "the magical Super Mario powers."
         )
 
+    @commands.hybrid_command()
+    @commands.check_any(
+        commands.has_role(config["admin_role_id"]),
+        commands.has_guild_permissions(administrator=True),
+    )
+    async def change_nickname(
+        self,
+        ctx,
+        new_nickname: str = commands.parameter(
+            description="What to set the nickname to."
+        ),
+    ):
+        bot = ctx.guild.get_member(self.bot.user.id)
+        await bot.edit(nick=new_nickname)
+        await ctx.send(f"Nickname changed to {new_nickname}", ephemeral=True)
+
 
 async def setup(bot):
     await bot.add_cog(General(bot))

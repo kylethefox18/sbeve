@@ -11,3 +11,6 @@ ignored_cogs = [ ]
 modmail_category_id = -1
 # the channel the bot should log tickets to
 modmail_logs_channel_id = -1
+
+# the prefix for prefix commands
+prefix = "$"
