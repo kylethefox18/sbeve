@@ -191,6 +191,7 @@ respectively. Summed together that is {total}.
             description="What to set the nickname to."
         ),
     ):
+        """Changes the nickname of the bot in the guild."""
         bot = ctx.guild.get_member(self.bot.user.id)
         await bot.edit(nick=new_nickname)
         await ctx.send(f"Nickname changed to {new_nickname}", ephemeral=True)
