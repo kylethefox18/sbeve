@@ -10,7 +10,7 @@ ForbOrBorb:
   send_forbborb_msg   Sends the forb vs borb message.
 General:
   add                 Adds two integers together.
-  change_nickname     
+  change_nickname     Changes the nickname of the bot in the guild.
   get_sticker_from_id Gets a sticker given its id.
   is_admin            Checks whether a member is an admin.
   is_staff_member     Checks whether a member is a staff member.
