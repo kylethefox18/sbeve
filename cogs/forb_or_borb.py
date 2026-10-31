@@ -9,9 +9,16 @@ from discord.ext import commands
 forbborb_info_path = (
     Path(__file__).resolve().parent.parent / "config" / "forbborb_config.toml"
 )
+
 with open(forbborb_info_path, "rb") as f:
     info = tomllib.load(f)
 
+persistent_path = (
+    Path(__file__).resolve().parent.parent / "persistent.json"
+)
+
+with open(persistent_path, "r") as f:
+    persistent_info = json.load(f)
 
 class ForbOrBorb(commands.Cog):
     def __init__(self, bot):
@@ -24,8 +31,8 @@ class ForbOrBorb(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         """Gives forb role or borb role based on a reaction emoji."""
-        # Make sure the message being reacted to is a role-assignment message
-        if payload.message_id != info["forbborb_msg_id"]:
+        # Make sure the message being reacted to is the role-assignment message
+        if payload.message_id != persistent_info["forbborb_msg_id"]:
             return
 
         guild = self.bot.get_guild(payload.guild_id)
@@ -58,7 +65,7 @@ class ForbOrBorb(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         # Make sure the message being reacted to is a role-assignment message
-        if payload.message_id != info["forbborb_msg_id"]:
+        if payload.message_id != persistent_info["forbborb_msg_id"]:
             return
 
         guild = self.bot.get_guild(payload.guild_id)
@@ -104,9 +111,9 @@ class ForbOrBorb(commands.Cog):
         await forbborb_msg.add_reaction(discord.PartialEmoji(name="🦊"))
         await forbborb_msg.add_reaction(discord.PartialEmoji(name="🐦"))
 
-        # record the id change in info json
-        async with await anyio.open_file(forbborb_info_path, "w") as outfile:
-            json_string = json.dumps(info, sort_keys=True, indent=4)
+        # record the id change in persistent json
+        async with await anyio.open_file(persistent_path, "w") as outfile:
+            json_string = json.dumps(persistent_info, sort_keys=True, indent=4)
             await outfile.write(json_string)
 
 

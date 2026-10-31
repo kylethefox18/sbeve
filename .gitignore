@@ -3,6 +3,7 @@ bot-env/
 config.json
 modmail-logs/
 **/__pycache__/
+persistent.json
 config/config.json
 config/config.toml
 config/forbborb_config.toml

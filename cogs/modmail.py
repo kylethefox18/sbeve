@@ -1,15 +1,21 @@
 import io
 import json
 import logging
+from pathlib import Path
 
 import anyio
 import discord
 from discord.ext import commands
 
-from config import config, config_path
+from config import config
 
 logger = logging.getLogger(__name__)
 
+persistent_path = (
+    Path(__file__).resolve().parent.parent / "persistent.json"
+)
+with open(persistent_path, "r") as f:
+    persistent_info = json.load(f)
 
 # A simple View for a persistent "Open Modmail" button
 class PersistentModmailButton(discord.ui.View):
@@ -60,7 +66,7 @@ async def create_modmail_channel(
     user_for -- the member for which to create the channel
     reason -- the reason for creating the channel
     """
-    modmail_id = config["MODMAIL_NEXT_ID"]
+    modmail_id = persistent_info["MODMAIL_NEXT_ID"]
     overwrites = {
         guild.default_role: discord.PermissionOverwrite(read_messages=False),
         guild.me: discord.PermissionOverwrite(read_messages=True),
@@ -84,11 +90,11 @@ async def create_modmail_channel(
     logger.info(f"Modmail channel <#{new_channel.id}> created for <@{user_for.id}>")
 
     # an id was used. go to the next one
-    config["MODMAIL_NEXT_ID"] += 1
+    persistent_info["MODMAIL_NEXT_ID"] += 1
 
     # record that the id was used in config
-    async with await anyio.open_file(config_path, "w") as outfile:
-        json_string = json.dumps(config, sort_keys=True, indent=4)
+    async with await anyio.open_file(persistent_path, "w") as outfile:
+        json_string = json.dumps(persistent_info, sort_keys=True, indent=4)
         await outfile.write(json_string)
 
     await new_channel.send(f"Hello <@{user_for.id}>\nWhat can we help you with?")
