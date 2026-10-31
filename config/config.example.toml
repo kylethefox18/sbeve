@@ -1,4 +1,5 @@
 admin_role_id = -1
+staff_member_role_id = -1
 
 # put the id of your server here
 guild_id = -1
@@ -10,5 +11,3 @@ ignored_cogs = [ ]
 modmail_category_id = -1
 # the channel the bot should log tickets to
 modmail_logs_channel_id = -1
-
-staff_member_role_id = -1

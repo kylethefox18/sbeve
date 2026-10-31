@@ -107,7 +107,7 @@ class Modmail(commands.Cog):
 
     @commands.hybrid_command()
     @commands.check_any(
-        commands.has_role(config["staff_member_role_id"]),
+        commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
     async def send_modmail_embed(self, ctx):
