@@ -54,7 +54,9 @@ class CustomBot(commands.Bot):
             # format help text for all commands
             for command in bot.walk_commands():
                 if command.help:
-                    command.help = command.help.format(bot_name=bot.user)
+                    command.help = command.help.format(
+                        bot_name=bot.user, prefix=config["prefix"]
+                    )
 
         self.tree.copy_global_to(guild=GUILD)
         await self.tree.sync(guild=GUILD)
@@ -73,13 +75,13 @@ class CustomBot(commands.Bot):
         await context.channel.send(
             f"Error in command {context.command.name}:\n"
             f"Is your input correct? "
-            f"Check $help {context.command.name}."
+            f"Check `{config['prefix']}help {context.command.name}`."
         )
 
 
 class MyHelpCommand(commands.DefaultHelpCommand):
     def get_ending_note(self):
-        return "Type $help command for more info on a command.\nSbeve out."
+        return config["help_end"]
 
     def get_command_signature(self, command):
         return super().get_command_signature(command)
@@ -89,7 +91,7 @@ help_command = MyHelpCommand()
 
 bot = CustomBot(
     command_prefix=config["prefix"],
-    description="sbeve sbeves.",
+    description=config["description"],
     intents=intents,
     help_command=help_command,
 )

@@ -11,11 +11,10 @@ from config import config
 
 logger = logging.getLogger(__name__)
 
-persistent_path = (
-    Path(__file__).resolve().parent.parent / "persistent.json"
-)
+persistent_path = Path(__file__).resolve().parent.parent / "persistent.json"
 with open(persistent_path, "r") as f:
     persistent_info = json.load(f)
+
 
 # A simple View for a persistent "Open Modmail" button
 class PersistentModmailButton(discord.ui.View):

@@ -13,12 +13,11 @@ forbborb_info_path = (
 with open(forbborb_info_path, "rb") as f:
     info = tomllib.load(f)
 
-persistent_path = (
-    Path(__file__).resolve().parent.parent / "persistent.json"
-)
+persistent_path = Path(__file__).resolve().parent.parent / "persistent.json"
 
 with open(persistent_path, "r") as f:
     persistent_info = json.load(f)
+
 
 class ForbOrBorb(commands.Cog):
     def __init__(self, bot):

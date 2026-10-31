@@ -22,7 +22,7 @@ class General(commands.Cog):
     ):
         """Adds two integers together.
 
-        Example: $add 2 3
+        Example: {prefix}add 2 3
         """
         await ctx.send(left + right)
 
@@ -37,7 +37,7 @@ class General(commands.Cog):
         """Says when a member joined.
 
         Member must be a member of the server.
-        Example: $joined "{bot_name}"
+        Example: {prefix}joined "{bot_name}"
         """
         # Join can be none: handle it.
         if member.joined_at is None:
@@ -56,7 +56,7 @@ class General(commands.Cog):
         """Rolls dice from input in NdN format.
 
         The first N is the number of dice, the second N is the side count of the dice.
-        Example: $roll 10d6
+        Example: {prefix}roll 10d6
         """
         try:
             rolls, num_sides = map(int, dice.split("d"))
@@ -144,7 +144,7 @@ respectively. Summed together that is {total}.
     ):
         """Checks whether a member is an admin.
 
-        Example: $is_admin {bot_name}"""
+        Example: {prefix}is_admin {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
                 'has' if get(member.roles, id=config['admin_role_id']) else 'has not'
@@ -162,7 +162,7 @@ respectively. Summed together that is {total}.
     ):
         """Checks whether a member is a staff member.
 
-        Example: $is_staff_member {bot_name}"""
+        Example: {prefix}is_staff_member {bot_name}"""
         await ctx.send(
             f"{member.display_name} " + f"{
                 'has'

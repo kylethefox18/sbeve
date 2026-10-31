@@ -14,3 +14,7 @@ modmail_logs_channel_id = -1
 
 # the prefix for prefix commands
 prefix = "$"
+
+# set some info about the bot here
+description = "sbeve sbeves."
+help_end = "Send the command \"help command\" for more info on a command.\nSbeve out."
