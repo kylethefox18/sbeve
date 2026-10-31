@@ -26,6 +26,12 @@ Modmail:
 Type $help command for more info on a command.
 Sbeve out.
 ```
+## Misc notes
+"Admin" is distinct from "with administrator priviliges": an admin is a person with 
+more power than a plain staff member in a discord server, but not necessarily with 
+administrative privileges. Administrative privileges means a role or something a 
+person belongs to has the "Administrator" box checked under Advanced Permissions\: 
+the most powerful permission there is.
 ## What is needed to run the code
 - The code itself: clone this repository  
 - The dependencies: at the root of the project run pip -r install requirements.txt  
@@ -47,5 +53,5 @@ Commands currently restricted by the bot are:
 `get_sticker_from_id` to staff members  (and people with administrator privileges)  
 `start_counter` to bot owner            (and people with administrator privileges)  
 `send_forbborb_msg` to bot owner        (and people with administrator privileges)  
-`send_modmail_embed` to staff members   (and people with administrator privileges)  
+`send_modmail_embed` to admins          (and people with administrator privileges)  
 You can set overrides as so, or differently if you wish.  
