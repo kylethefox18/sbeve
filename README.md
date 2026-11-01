@@ -69,11 +69,12 @@ If everything is now set up correctly, you should be able to run the code with j
 In order to hide slash commands from those without the permission to perform them, you
 must do the following\:
 - Go to Server Settings > Apps > Integrations > Bots and Apps > Manage (for your bot)
-- Set who can see what command (via overrides)
-Commands currently restricted by the bot are\:  
-`get_sticker_from_id` to staff members  (and people with administrator privileges)  
-`start_counter` to bot owner            (and people with administrator privileges)  
-`send_forbborb_msg` to bot owner        (and people with administrator privileges)  
-`send_modmail_embed` to admins          (and people with administrator privileges)  
-`change_nickname` to admins             (and people with administrator privileges)  
+- Set who can see what command (via overrides). Commands currently restricted by the 
+bot are\:  
+    - `get_sticker_from_id` to staff members  (and people with administrator privileges)  
+    - `start_counter` to bot owner            (and people with administrator privileges)  
+    - `send_forbborb_msg` to bot owner        (and people with administrator privileges)  
+    - `send_modmail_embed` to admins          (and people with administrator privileges)  
+    - `change_nickname` to admins             (and people with administrator privileges)  
+    - and the bot owner can execute every command
 You can set overrides as so, or differently if you wish.  
