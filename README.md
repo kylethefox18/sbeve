@@ -58,10 +58,10 @@ the most powerful permission there is.
 
 A lot of these are usually already covered under the default @everyone permissions by 
 default, so I'm not sure if there happens to be something needed that's usually covered!
-I included that which is covered and I intend to include ALL permissions needed, 
-assuming NO permissions by default. If, when testing the bot yourself, you run into a 
-permission error / find a permission needed I didn't name correctly, please open an 
-issue on github or contact me on discord! I'd be super grateful :D  
+I included that which is covered and I intend to include ALL permissions needed in the 
+above list, assuming NO permissions by default. If, when testing the bot yourself, you 
+run into a permission error / find a permission needed I didn't name correctly, please 
+open an issue on github or contact me on discord! I'd be super grateful :D  
   
 If everything is now set up correctly, you should be able to run the code with just
 `$ python3 main.py` \:)  
