@@ -113,6 +113,7 @@ respectively. Summed together that is {total}.
     @commands.hybrid_command()
     @commands.guild_only()
     @commands.check_any(
+        commands.is_owner(),
         commands.has_role(config["staff_member_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
@@ -181,6 +182,7 @@ respectively. Summed together that is {total}.
     @commands.hybrid_command()
     @commands.guild_only()
     @commands.check_any(
+        commands.is_owner(),
         commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )

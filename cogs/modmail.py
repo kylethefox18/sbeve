@@ -107,6 +107,7 @@ class Modmail(commands.Cog):
     @commands.hybrid_command()
     @commands.guild_only()
     @commands.check_any(
+        commands.is_owner(),
         commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
