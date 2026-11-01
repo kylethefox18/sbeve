@@ -71,11 +71,10 @@ must do the following\:
 - Go to Server Settings > Apps > Integrations > Bots and Apps > Manage (for your bot)
 - Set who can see what command (via overrides). Commands currently restricted by the 
 bot are\:  
-    - `get_sticker_from_id` to staff members  (and people with administrator privileges)  
-    - `start_counter` to bot owner            (and people with administrator privileges)  
-    - `send_forbborb_msg` to bot owner        (and people with administrator privileges)  
-    - `send_modmail_embed` to admins          (and people with administrator privileges)  
-    - `change_nickname` to admins             (and people with administrator privileges)  
-    - and the bot owner can execute every command.  
+    - `get_sticker_from_id` to staff members, bot owner, and people with administrator privileges.  
+    - `start_counter` to bot owner, and people with administrator privileges.  
+    - `send_forbborb_msg` to bot owner, and people with administrator privileges.  
+    - `send_modmail_embed` to admins, bot owner, and people with administrator privileges.  
+    - `change_nickname` to admins, bot owner, and people with administrator privileges.  
   
 You can set overrides as so, or differently if you wish.  
