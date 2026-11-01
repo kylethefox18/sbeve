@@ -76,5 +76,6 @@ bot are\:
     - `send_forbborb_msg` to bot owner        (and people with administrator privileges)  
     - `send_modmail_embed` to admins          (and people with administrator privileges)  
     - `change_nickname` to admins             (and people with administrator privileges)  
-    - and the bot owner can execute every command
+    - and the bot owner can execute every command.  
+  
 You can set overrides as so, or differently if you wish.  
