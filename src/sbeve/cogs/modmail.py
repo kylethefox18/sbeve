@@ -7,11 +7,13 @@ import anyio
 import discord
 from discord.ext import commands
 
-from config import config
+from sbeve.config import config
 
 logger = logging.getLogger(__name__)
 
-persistent_path = Path(__file__).resolve().parent.parent / "persistent.json"
+bot_root = Path(__file__).resolve().parent.parent.parent.parent
+persistent_path = bot_root / "persistent.json"
+
 with open(persistent_path, "r") as f:
     persistent_info = json.load(f)
 
@@ -158,9 +160,9 @@ class Modmail(commands.Cog):
             # parse modmail ticket's id and generate file path
             modmail_id = int(ctx.channel.name.split("-")[2])
             log_filename = f"{ctx.channel.name}-{ctx.channel.topic}.md"
-            # this relative file path is fine in the cog, as it is relative to the bot
-            # wherein the cog runs
-            log_filepath = f"modmail-logs/{log_filename}"
+
+            # get the log file path
+            log_filepath = bot_root / f"modmail-logs/{log_filename}"
 
             # log that modmail is being closed
             logger.info(f"Closing and archiving modmail #{modmail_id}...")

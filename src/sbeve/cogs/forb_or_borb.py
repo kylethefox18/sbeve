@@ -7,13 +7,15 @@ import discord
 from discord.ext import commands
 
 forbborb_info_path = (
-    Path(__file__).resolve().parent.parent / "config" / "forbborb_config.toml"
+    Path(__file__).resolve().parent.parent.parent.parent \
+            / "config" / "forbborb_config.toml"
 )
 
 with open(forbborb_info_path, "rb") as f:
     info = tomllib.load(f)
 
-persistent_path = Path(__file__).resolve().parent.parent / "persistent.json"
+persistent_path = Path(__file__).resolve().parent.parent.parent.parent \
+        / "persistent.json"
 
 with open(persistent_path, "r") as f:
     persistent_info = json.load(f)

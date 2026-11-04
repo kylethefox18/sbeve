@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 from discord.utils import get
 
-from config import config
+from sbeve.config import config
 
 intents = discord.Intents.default()
 

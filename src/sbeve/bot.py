@@ -1,11 +1,12 @@
 import logging
 import os
+from pathlib import Path
 
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from config import config
+from sbeve.config import config
 
 # root logger
 logging.basicConfig(level=logging.INFO)
@@ -22,6 +23,9 @@ intents = discord.Intents.default()
 
 intents.message_content = True
 
+# get directory bot.py is in (to load cogs)
+bot_dir = Path(__file__).parent
+cogs_path = bot_dir / "cogs"
 
 class CustomBot(commands.Bot):
     # Suppress error on the User attribute being None
@@ -32,7 +36,7 @@ class CustomBot(commands.Bot):
 
     async def setup_hook(self) -> None:
         # load extensions/cogs
-        cogs_dir = os.fsencode("cogs")
+        cogs_dir = os.fsencode(str(cogs_path))
         for file in os.listdir(cogs_dir):
             filename = os.fsdecode(file)
 
@@ -49,7 +53,7 @@ class CustomBot(commands.Bot):
                 logger.warning(f"Skipping file of unexpected type: {filename}")
             else:
                 # load the cog
-                await self.load_extension(f"cogs.{os.path.splitext(filename)[0]}")
+                await self.load_extension(f"sbeve.cogs.{os.path.splitext(filename)[0]}")
 
             # format help text for all commands
             for command in bot.walk_commands():
@@ -101,4 +105,8 @@ bot = CustomBot(
     help_command=help_command,
 )
 
-bot.run(BOT_TOKEN)
+def main():
+    bot.run(BOT_TOKEN)
+
+if __name__ == "__main__":
+    main()
