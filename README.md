@@ -65,6 +65,13 @@ open an issue on github or contact me on discord! I'd be super grateful :D
   
 If everything is now set up correctly, you should be able to run the code with just
 `$ uv run sbeve` \:)  
+## Editing the modmail embed
+The `modmail_embed.json` file is in compliance with 
+[discord API documentation](https://docs.discord.com/developers/resources/message#embed-object) as per 
+[the discord.py docs](https://discordpy.readthedocs.io/en/stable/api.html?highlight=embed#discord.Embed.from_dict)
+. You can create compliant embed code with a tool like 
+[this](https://discortools.github.io/embed-generator/): select `Raw Embed JSON Object` 
+and copy it into `modmail_embed.json` to customise your modmail embed.
 ## Hiding slash commands for those without privileges
 In order to hide slash commands from those without the permission to perform them, you
 must do the following\:

@@ -7,3 +7,4 @@ modmail-logs/
 persistent.json
 config/config.toml
 config/forbborb_config.toml
+config/modmail_embed.json

@@ -1,0 +1,24 @@
+{
+  "color": 5793266,
+  "title": "Open a modmail by clicking the button below",
+  "author": {
+    "name": "Modmail"
+  },
+  "description": "By clicking `the button` below,\n```\nYou can open a modmail.\n```",
+  "fields": [
+    {
+      "name": "What to do?",
+      "value": "Click the button below",
+      "inline": true
+    },
+    {
+      "name": "What it does?",
+      "value": "Opens a modmail",
+      "inline": true
+    }
+  ],
+  "footer": {
+    "text": "Sbeve"
+  },
+  "timestamp": "2026-11-04T17:27:28.560Z"
+}

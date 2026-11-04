@@ -11,12 +11,16 @@ from sbeve.config import config
 
 logger = logging.getLogger(__name__)
 
-bot_root = Path(__file__).resolve().parent.parent.parent.parent
-persistent_path = bot_root / "persistent.json"
+proj_root = Path(__file__).resolve().parent.parent.parent.parent
+persistent_path = proj_root / "persistent.json"
 
 with open(persistent_path, "r") as f:
     persistent_info = json.load(f)
 
+modmail_embed_path = proj_root / "config" / "modmail_embed.json"
+
+with open(modmail_embed_path, "r") as f:
+    modmail_embed_data = json.load(f)
 
 # A simple View for a persistent "Open Modmail" button
 class PersistentModmailButton(discord.ui.View):
@@ -115,28 +119,9 @@ class Modmail(commands.Cog):
     )
     async def send_modmail_embed(self, ctx):
         """Sends the "Open Modmail" embed."""
-        embed = discord.Embed(
-            title="Modmail System", description="Welcome to Modmail!", colour=0xFF7800
-        )
 
-        embed.set_author(name="Form of Communication")
-
-        embed.add_field(
-            name="Purpose",
-            value="If you click the button below, you will create a "
-            "temporary chat inside of our server which will allow you to "
-            "communicate with the staff team! You can voice your concerns, "
-            "bring new ideas to the staff team or even ask any question "
-            "regarding the server. You can even apply for the artist role "
-            "this way!\n\n"
-            "This form of communication is to be taken seriously. Misuse or "
-            "abuse of this feature will result in consequences.",
-            inline=False,
-        )
-
-        embed.set_footer(
-            text="The Anthro Inn Staff Team", icon_url="https://i.imgur.com/3V1A55G.png"
-        )
+        # parse modmail_embed_data
+        embed = discord.Embed.from_dict(modmail_embed_data)
 
         await ctx.send(embed=embed, view=PersistentModmailButton())
 
@@ -162,7 +147,7 @@ class Modmail(commands.Cog):
             log_filename = f"{ctx.channel.name}-{ctx.channel.topic}.md"
 
             # get the log file path
-            log_filepath = bot_root / f"modmail-logs/{log_filename}"
+            log_filepath = proj_root / f"modmail-logs/{log_filename}"
 
             # log that modmail is being closed
             logger.info(f"Closing and archiving modmail #{modmail_id}...")
