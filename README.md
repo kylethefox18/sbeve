@@ -34,9 +34,9 @@ administrative privileges. Administrative privileges means a role or something a
 person belongs to has the "Administrator" box checked under Advanced Permissions\: 
 the most powerful permission there is.
 ## What is needed to run the code
+- uv
 - The code itself: clone this repository
-- The dependencies: at the root of the project run pip -r install requirements.txt 
-(I'd recommend doing the above in a virtual environment to keep system python clean)
+- The dependencies: run uv sync
 - A discord bot with Message Content privileged gateway intent
 - .env file at root of project, with BOT\_TOKEN = the bot's bot token
 - Adjust the example config files to suit your needs
@@ -64,7 +64,7 @@ run into a permission error / find a permission needed I didn't name correctly, 
 open an issue on github or contact me on discord! I'd be super grateful :D  
   
 If everything is now set up correctly, you should be able to run the code with just
-`$ python3 main.py` \:)  
+`$ uv run sbeve` \:)  
 ## Hiding slash commands for those without privileges
 In order to hide slash commands from those without the permission to perform them, you
 must do the following\:
