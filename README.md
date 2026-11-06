@@ -56,6 +56,16 @@ Modmail:
 Send the command "help command" for more info on a command.
 Sbeve out.
 ```
+These are restricted commands:
+- `get_sticker_from_id` to staff members, bot owner, and people with administrator privileges.  
+- `start_counter` to bot owner, and people with administrator privileges.  
+- `send_forbborb_msg` to bot owner, and people with administrator privileges.  
+- `send_modmail_embed` to admins, bot owner, and people with administrator privileges.  
+- `change_nickname` to admins, bot owner, and people with administrator privileges.  
+The default behaviour of sbeve when someone without permission performs a restricted 
+command is to do nothing (as to avoid giving unprivileged people any hint that they have 
+found a privileged command)  
+  
 If you want to see usage examples for command, send "help command" (prefix only) for 
 more information on it. The bot's prefix in the test server is shown before the pipe:
 `sb!` (for example, `sb! add 3 4` or `sb! help add`)
