@@ -1,6 +1,35 @@
 # Sbeve: A Discord bot that does stuff mostly
 You can try Sbeve out [here](https://discord.gg/RVNBBA3kfY)  
-These are some commands Sbeve offers:
+## NOTES TO REVIEWER
+The way Sbeve is currently structured is _heavily_ server-dependendant. I have not yet 
+implemented a database that allows the bot to be simply invited to a server for full 
+use. If you want to try out admin-only commands (named at the bottom of this README 
+you'll have to either follow the instructions to run the code yourself, or ping me 
+in the test server to request temporary permissions to try the commands yourself. 
+(I will need some kind of verification that you are a Hack Club reviewer for the 
+latter, though.)
+## Commands
+These are the commands Sbeve offers to anyone (that you can try in the demo server):
+```
+sbeve sbeves.
+
+General:
+  add             Adds two integers together.
+  is_admin        Checks whether a member is an admin.
+  is_staff_member Checks whether a member is a staff member.
+  joined          Says when a member joined.
+  roll            Rolls dice from input in NdN format.
+Greetings:
+  hello           Says hello
+Modmail:
+  close_modmail   Closes the modmail channel it is called in.
+​No Category:
+  help            Shows this message
+
+Send the command "help command" for more info on a command.
+Sbeve out.
+```
+These are all commands Sbeve offers:
 ```
 sbeve sbeves.
 
@@ -27,6 +56,9 @@ Modmail:
 Send the command "help command" for more info on a command.
 Sbeve out.
 ```
+If you want to see usage examples for command, send "help command" (prefix only) for 
+more information on it. The bot's prefix in the test server is shown before the pipe:
+`sb!` (for example, `sb! add 3 4` or `sb! help add`)
 ## Misc notes
 "Admin" is distinct from "with administrator priviliges": an admin is a person with 
 more power than a plain staff member in a discord server, but not necessarily with 
