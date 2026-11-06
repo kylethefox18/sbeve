@@ -1,6 +1,8 @@
 # Sbeve: A Discord bot that does stuff mostly
 You can try Sbeve out [here](https://discord.gg/RVNBBA3kfY)  
 ## NOTES TO REVIEWER
+Send a message in format `sb! help [command]` for more info on a command (including
+examples where applicable)  
 The way Sbeve is currently structured is _heavily_ server-dependendant. I have not yet 
 implemented a database that allows the bot to be simply invited to a server for full 
 use. If you want to try out admin-only commands (named at the bottom of this README 
