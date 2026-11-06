@@ -129,6 +129,8 @@ respectively. Summed together that is {total}.
         In effect: takes in the id and returns:
         https://cdn.discordapp.com/stickers/<sticker-id>.png
 
+        Example: {prefix}get_sticker_from_id 1104876438177456238
+
         If the sticker is animated, you might need to go to
         https://cdn.discordapp.com/stickers/<sticker-id>.json
         download the file, and go to a site like
