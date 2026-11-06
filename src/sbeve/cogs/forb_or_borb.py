@@ -6,6 +6,8 @@ import anyio
 import discord
 from discord.ext import commands
 
+from sbeve.config import config
+
 forbborb_info_path = (
     Path(__file__).resolve().parent.parent.parent.parent \
             / "config" / "forbborb_config.toml"
@@ -103,6 +105,7 @@ class ForbOrBorb(commands.Cog):
     @commands.guild_only()
     @commands.check_any(
         commands.is_owner(),
+        commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
     async def send_forbborb_msg(self, ctx: commands.Context):

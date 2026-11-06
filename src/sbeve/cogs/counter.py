@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 
+from sbeve.config import config
+
 
 # Define a simple persistent View that gives us a counter button
 # note: does not actually persist the count over restarts
@@ -43,6 +45,7 @@ class Counter(commands.Cog):
     @commands.guild_only()
     @commands.check_any(
         commands.is_owner(),
+        commands.has_role(config["admin_role_id"]),
         commands.has_guild_permissions(administrator=True),
     )
     async def start_counter(self, ctx: commands.Context):

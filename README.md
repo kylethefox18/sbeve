@@ -1,5 +1,6 @@
 # Sbeve: A Discord bot that does stuff mostly
 You can try Sbeve out [here](https://discord.gg/RVNBBA3kfY)  
+if you want to run every command use [this link](https://discord.gg/gcPEG6fd3B)  
 ## NOTES TO REVIEWER
 Send a message in format `sb! help [command]` for more info on a command (including
 examples where applicable)  
