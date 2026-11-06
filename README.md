@@ -5,9 +5,7 @@ The way Sbeve is currently structured is _heavily_ server-dependendant. I have n
 implemented a database that allows the bot to be simply invited to a server for full 
 use. If you want to try out admin-only commands (named at the bottom of this README 
 you'll have to either follow the instructions to run the code yourself, or ping me 
-in the test server to request temporary permissions to try the commands yourself. 
-(I will need some kind of verification that you are a Hack Club reviewer for the 
-latter, though.)
+in the test server to request permissions to try the commands yourself. 
 ## Commands
 These are the commands Sbeve offers to anyone (that you can try in the demo server):
 ```
