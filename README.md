@@ -60,6 +60,7 @@ These are restricted commands:
 - `send_forbborb_msg` to bot owner, and people with administrator privileges.  
 - `send_modmail_embed` to admins, bot owner, and people with administrator privileges.  
 - `change_nickname` to admins, bot owner, and people with administrator privileges.  
+  
 The default behaviour of sbeve when someone without permission performs a restricted 
 command is to do nothing (as to avoid giving unprivileged people any hint that they have 
 found a privileged command)  
