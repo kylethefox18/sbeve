@@ -6,9 +6,7 @@ Send a message in format `sb! help [command]` for more info on a command (includ
 examples where applicable)  
 The way Sbeve is currently structured is _heavily_ server-dependendant. I have not yet 
 implemented a database that allows the bot to be simply invited to a server for full 
-use. If you want to try out admin-only commands (named at the bottom of this README 
-you'll have to either follow the instructions to run the code yourself, or ping me 
-in the test server to request permissions to try the commands yourself. 
+use.
 ## Commands
 NOTE: the help command is only available as a prefix command (in example server, 
 as sb! help).  
