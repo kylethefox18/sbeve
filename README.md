@@ -10,6 +10,8 @@ use. If you want to try out admin-only commands (named at the bottom of this REA
 you'll have to either follow the instructions to run the code yourself, or ping me 
 in the test server to request permissions to try the commands yourself. 
 ## Commands
+NOTE: the help command is only available as a prefix command (in example server, 
+as sb! help).  
 These are the commands Sbeve offers to anyone (that you can try in the demo server):
 ```
 sbeve sbeves.
@@ -27,7 +29,7 @@ Modmail:
 ​No Category:
   help            Shows this message
 
-Send the command "help command" for more info on a command.
+Send the command "sb! help command" for more info on a command.
 Sbeve out.
 ```
 These are all commands Sbeve offers:
@@ -54,7 +56,7 @@ Modmail:
 ​No Category:
   help                Shows this message
 
-Send the command "help command" for more info on a command.
+Send the command "sb! help command" for more info on a command.
 Sbeve out.
 ```
 These are restricted commands:
