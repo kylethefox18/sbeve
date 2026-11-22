@@ -17,4 +17,4 @@ prefix = "$"
 
 # set some info about the bot here
 description = "sbeve sbeves."
-help_end = "Send the command \"help command\" for more info on a command.\nSbeve out."
+help_end = "Send the command \"$help command\" for more info on a command.\nSbeve out."
